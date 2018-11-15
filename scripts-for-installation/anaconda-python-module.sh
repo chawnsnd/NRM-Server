@@ -28,6 +28,9 @@ conda install -c anaconda scikit-learn
 echo "install matplotlib"
 conda install matplotlib
 
+echo "install anaconda flask"
+conda install -c anaconda flask 
+
 echo "==========================conda module installation completed============"
 
 

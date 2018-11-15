@@ -2,7 +2,7 @@
 import numpy 
 import json
 
-
+#use recipeDao only
 def recommendMenu(MenusInDB):
     recommendedMenu = MenusInDB
     return recommendedMenu
