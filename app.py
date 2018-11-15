@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, Response
 app = Flask(__name__)
 
 tmpRecipe = {
-    "id":"12345", 
+    "recipeId":"12345", 
     "name":"백종원의 부대찌개", 
     "chef":"백종원",
     "menu":"부대찌개",
@@ -35,7 +35,7 @@ def recommendRecipeByMenu():
     req = request.json
     menu = req['action']['parameters']['menu']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "name": tmpRecipe["name"]
         }
     return jsonify(result);
@@ -46,7 +46,7 @@ def recommendRecipeByChef():
     req = request.json
     chef = req['action']['parameters']['chef']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "name": tmpRecipe["name"]
         }
     return jsonify(result);
@@ -58,7 +58,7 @@ def answerStepFromRecipeByStepNo():
     # step = req['action']['parameters']['step']['value']
     step = 3;
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "step": tmpRecipe["steps"][step],
         "stepNo": step
         }
@@ -70,7 +70,7 @@ def answerFromIngredientsFromRecipe():
     req = request.json
     # recipe = req['action']['parameters']['recipe']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "ingredients": tmpRecipe["ingredients"]
         }
     return jsonify(result);
