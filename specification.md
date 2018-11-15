@@ -31,17 +31,14 @@ user.recipeID : string
 
 for chef in chefs. A chef must have (menu, recipe) at once 
 
-do we have to make chef collection ?? 
 for example)
 
-chef_doc = {"Id":chef.id, "Name":chef.name, "Steps":steps, "RecipeMenu":chef.recipeMenu}
-
+chef_doc = {"Id":chef.id, "Name":chef.name, "Steps":steps, "RecipeMenu":chef.recipeMenus}
 chef.id: int 
 chef.name : string 
 chef.steps : int 
-chef.recipeMenu : [(string,string), (string,string), ... ]
-
-
+chef.recipeMenus : [(string,string), (string,string), ... ] 
+recipeMenus : (RecipeID, MenuID)
 
 
 
