@@ -46,26 +46,27 @@ def insert_recipes(recipes):
     return RecipeCol.insert(recipe) 
 
 
-def query_menus(keyWord):
-    
-    return RecipeCol.find({"name":keyWord}).limit(1)
-
-
 def query_menu(id):
     global RecipeCol
     query = {"id": id}
-    return RecipeCol.find(query).limit(1)[0]['menu']
+    result = RecipeCol.find(query).limit(1)[0]['menu']
+    return result
 
-def query_recipe(id):
+def query_recipe_step(id):
     global RecipeCol
     query = {"id": id}
-    return RecipeCol.find(query).limit(1)[0]['steps']
+    result = RecipeCol.find(query).limit(1)[0]['steps']
+    return result
 
-
-def recommend_api(data,keyWord):
-    recommendation =""
-    if keyWord == "menu":
-        recommendation = recommendMenu(data['menu'])
+def query_recipes(keyWord):
+    if keyWord=='all':
+        result = list(RecipeCol.find({}))
     else:
-        recommendation = recommendRecipe(data['recipe'])
-    return recommendation
+        result = list(RecipeCol.find({"name":keyWord}))
+    return result
+  
+def query_recipe(id):
+    global RecipeCol
+    query = {"id":id}
+    result = RecipeCol.find(query).limit(1)[0]
+    return result
