@@ -3,7 +3,7 @@ import numpy as np
 import json
 import matplotlib.pyplot 
 from random import randint
-from dao.recipeDao import query_menu,query_recipe, query_recipes_all
+from dao.recipeDao import *
 
 #use recipeDao only
 def recommendMenu():
@@ -17,8 +17,8 @@ def recommendRecipe():
     recommendedRecipe = RecipesInDB[randint(0,len(RecipesInDB)-1)]
     return recommendedRecipe['name']
 
-def nextStep(recipeId,stepNo):
-    recipe = query_recipe(recipeId)
+def nextStepById(recipeId,stepNo):
+    recipe = query_recipe_with_id(recipeId)
     recipeSize = len(recipe)
     stepNo+=1
     if stepNo >=recipeSize:
@@ -26,17 +26,38 @@ def nextStep(recipeId,stepNo):
     step = recipe[stepNo]
     return step , stepNo
 
-def previousStep(recipeId,stepNo):
-    recipe = query_recipe(recipeId)
+def previousStepById(recipeId,stepNo):
+    recipe = query_recipe_with_id(recipeId)
     stepNo-=1
     if stepNo < 0:
         return False , 0
     step = recipe[stepNo]
     return step , stepNo
 
-def numberStep(recipeId,stepNo):
-    recipe = query_recipe(recipeId)
+def numberStepById(recipeId,stepNo):
+    recipe = query_recipe_with_id(recipeId)
     if stepNo <0 or stepNo >= len(recipe):
-        return False
+        return False , 0
     step = recipe[stepNo]
     return step , stepNo
+
+def getIngredientsById(recipeId):
+    ingredients = query_ingredients_with_id(recipeId)
+    if ingredients is None:
+        return False
+    return ingredients
+
+
+def numberStepByMenu(recipeMenu,stepNo):
+    recipe = query_recipe_with_menu(recipeMenu)
+    if stepNo <0 or stepNo >= len(recipe):
+        return False , 0
+    step = recipe[stepNo]
+    return step , stepNo
+
+def getIngredientsByMenu(recipeMenu):
+    ingredients = query_ingredients_with_menu(recipeMenu)
+    if ingredients is None:
+        return False
+    return ingredients
+    

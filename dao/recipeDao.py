@@ -2,13 +2,9 @@
 
 # WS server example that synchronizes state across clients
 
-import asyncio
 import json
-import logging
-import websockets
 import pymongo
 import sys
-from bson.json_util import dumps
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["NRMDB"]
 RecipeCol = mydb["TestRecipeCollection"]
@@ -57,7 +53,7 @@ def query_recipe_step_no(id,stepNo):
     result = RecipeCol.find(query).limit(1)[0]['steps'][stepNo]
     return result
 
-def query_recipe(id):
+def query_recipe_with_id(id):
     global RecipeCol
     query = {"id": id}
     result = RecipeCol.find(query).limit(1)[0]['steps']
@@ -66,4 +62,20 @@ def query_recipe(id):
 def query_recipes_all():
     global RecipeCol
     result = list(RecipeCol.find({}))
+    return result
+
+def query_ingredients_with_id(id):
+    global RecipeCol
+    query = {"id": id}
+    return RecipeCol.find(query).limit(1)[0]['ingredients']
+    
+def query_ingredients_with_menu(menu):
+    global RecipeCol
+    query = {"menu": menu}
+    return RecipeCol.find(query).limit(1)[0]['ingredients']
+
+def query_recipe_with_menu(menu):
+    global RecipeCol
+    query = {"menu": menu}
+    result = RecipeCol.find(query).limit(1)[0]['steps']
     return result
