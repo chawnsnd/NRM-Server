@@ -9,7 +9,6 @@ import websockets
 import pymongo
 import sys
 from bson.json_util import dumps
-from service.recipeService import recommendMenu, recommendRecipe
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["NRMDB"]
 RecipeCol = mydb["TestRecipeCollection"]
@@ -20,7 +19,7 @@ def insert_recipes(recipes):
     
     if recipes is None:
         print("Failed (no recipe)")
-        return dumps({"type":"insert_recipes","response":"insertion/update fail"})
+        return False
 
     for recipe in recipes:
         criteria = {"id":recipes['id']}
@@ -42,8 +41,8 @@ def insert_recipes(recipes):
                     continue
                 RecipeCol.update_one(criteria,addChefs)
             continue
-
-    return RecipeCol.insert(recipe) 
+        RecipeCol.insert(recipe) 
+    return True
 
 
 def query_menu(id):
@@ -52,21 +51,19 @@ def query_menu(id):
     result = RecipeCol.find(query).limit(1)[0]['menu']
     return result
 
-def query_recipe_step(id):
+def query_recipe_step_no(id,stepNo):
+    global RecipeCol
+    query = {"id": id}
+    result = RecipeCol.find(query).limit(1)[0]['steps'][stepNo]
+    return result
+
+def query_recipe(id):
     global RecipeCol
     query = {"id": id}
     result = RecipeCol.find(query).limit(1)[0]['steps']
     return result
 
-def query_recipes(keyWord):
-    if keyWord=='all':
-        result = list(RecipeCol.find({}))
-    else:
-        result = list(RecipeCol.find({"name":keyWord}))
-    return result
-  
-def query_recipe(id):
+def query_recipes_all():
     global RecipeCol
-    query = {"id":id}
-    result = RecipeCol.find(query).limit(1)[0]
+    result = list(RecipeCol.find({}))
     return result
