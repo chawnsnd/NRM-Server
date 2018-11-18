@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, Response
+from service.recipeService import recommendMenu
 app = Flask(__name__)
 
 tmpRecipe = {
@@ -24,10 +25,24 @@ def helloWorld():
 def health():
     return Response("OK", status=200);
 
-#레시피 랜덤추천
-@app.route("/recommendRecipe", methods=["POST"])
-def recommendRecipe():
-    return jsonify(tmpRecipe["name"]);
+# #레시피 랜덤추천
+# @app.route("/recommendRecipe", methods=["POST"])
+# def recommendRecipe():
+#     return jsonify(tmpRecipe["name"]);
+
+#레시피추천
+@app.route("/answerMenuRecommendation", methods=["POST"])
+def answerMenuRecommendation():
+    menu = recommendMenu()
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "menu": menu
+        }
+    }
+    return jsonify(res);
+    
 
 #메뉴명으로 레시피 랜덤추천
 @app.route("/recommendRecipeByMenu", methods=["POST"])
@@ -76,4 +91,5 @@ def answerFromIngredientsFromRecipe():
     return jsonify(result);
 
 if __name__ == '__main__':
-    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    # app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    app.run(port=5000)
