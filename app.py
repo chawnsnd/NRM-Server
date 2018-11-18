@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, Response, session
-from service.recipeService import recommendMenu, recommendRecipe
+from service.recipeService import *
+from dao.recipeDao import *
 
 app = Flask(__name__)
 
@@ -30,7 +31,7 @@ def answerRecipe():
     if 'MENU' not in req['action']['parameters'] and 'CHEF' not in req['action']['parameters']:
         if 'menu' in session:
             menu = session['menu']
-            recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
+            recipe = query_recipe_with_menu(menu) #이거 만들어야 됨
             res = {
                 "version": "1.0",
                 "resultCode": "OK",
@@ -49,7 +50,7 @@ def answerRecipe():
             }
     elif 'CHEF' in req['action']['parameters']:
         chef = req['action']['parameters']['CHEF']['value']
-        recipe = recommendRecipeByChef(chef); #이거 만들어야 됨
+        recipe = query_recipe_with_chef(chef); #이거 만들어야 됨
         res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -60,7 +61,7 @@ def answerRecipe():
         }
     elif 'MENU' in req['action']['parameters']:
         menu = req['action']['parameters']['MENU']['value']
-        recipe = recommendRecipeByMenu(menu); #이거 만들어야 됨
+        recipe = query_recipe_with_menu(menu); #이거 만들어야 됨
         res = {
             "version": "1.0",
             "resultCode": "OK",
