@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, session
+from service.recipeService import recommendMenu
+
 app = Flask(__name__)
 
 tmpRecipe = {
-    "id":"12345", 
+    "recipeId":"12345", 
     "name":"백종원의 부대찌개", 
     "chef":"백종원",
     "menu":"부대찌개",
@@ -24,10 +26,25 @@ def helloWorld():
 def health():
     return Response("OK", status=200);
 
-#레시피 랜덤추천
-@app.route("/recommendRecipe", methods=["POST"])
-def recommendRecipe():
-    return jsonify(tmpRecipe["name"]);
+# #레시피 랜덤추천
+# @app.route("/recommendRecipe", methods=["POST"])
+# def recommendRecipe():
+#     return jsonify(tmpRecipe["name"]);
+
+#레시피추천
+@app.route("/answerMenuRecommendation", methods=["POST"])
+def answerMenuRecommendation():
+    menu = recommendMenu()
+    session['menu'] = menu
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "menu": menu
+        }
+    }
+    return jsonify(res);
+    
 
 #메뉴명으로 레시피 랜덤추천
 @app.route("/recommendRecipeByMenu", methods=["POST"])
@@ -35,7 +52,7 @@ def recommendRecipeByMenu():
     req = request.json
     menu = req['action']['parameters']['menu']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "name": tmpRecipe["name"]
         }
     return jsonify(result);
@@ -46,7 +63,7 @@ def recommendRecipeByChef():
     req = request.json
     chef = req['action']['parameters']['chef']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "name": tmpRecipe["name"]
         }
     return jsonify(result);
@@ -58,7 +75,7 @@ def answerStepFromRecipeByStepNo():
     # step = req['action']['parameters']['step']['value']
     step = 3;
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "step": tmpRecipe["steps"][step],
         "stepNo": step
         }
@@ -70,10 +87,11 @@ def answerFromIngredientsFromRecipe():
     req = request.json
     # recipe = req['action']['parameters']['recipe']['value']
     result = {
-        "id": tmpRecipe["id"],
+        "recipeId": tmpRecipe["id"],
         "ingredients": tmpRecipe["ingredients"]
         }
     return jsonify(result);
 
 if __name__ == '__main__':
-    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    # app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    app.run(port=5000)
