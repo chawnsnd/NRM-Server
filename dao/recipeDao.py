@@ -9,44 +9,9 @@ import websockets
 import pymongo
 import sys
 from bson.json_util import dumps
-from algorithmModule import recommendMenu, recommendRecipe
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["NRMDB"]
-MenuCol = mydb["TestMenuCollection"]
 RecipeCol = mydb["TestRecipeCollection"]
-
-
-def insert_menus(menus):
-    global MenuCol
-    
-    if menus is None:
-        print("Failed (no menu)")
-        return dumps({"type":"insert_menus","response":"insertion/update fail"})
-
-    for menu in menus:
-        criteria = {"id":menus['id']}
-        setChefs= {"$set" : {"chefs":menu['chefs']}}
-        addChefs = {"$push": {"chefs":{"$each":menu['chefs']}}}
-        menu_doc = MenuCol.find_one(criteria)
-        
-        #check chefs if exists
-        if menu_doc:
-            #update chefs
-            if not 'chefs' in menu_doc:
-                MenuCol.update_one(criteria,setChefs,True)
-                continue
-            if menu['chefs'] is None: 
-                MenuCol.update_one(criteria,setChefs,True)
-            else:
-                #skip if all elements in chefs are in menu , update all if not
-                if all(chef in menu['chefs'] for chef in menu_doc['chefs']):
-                    continue
-                MenuCol.update_one(criteria,addChefs)
-            continue
-        
-        MenuCol.insert(menu)
-
-    return dumps({"type": "insert_menus", "response": "insertion/update success"})
 
 
 def insert_recipes(recipes):
@@ -54,7 +19,7 @@ def insert_recipes(recipes):
     
     if recipes is None:
         print("Failed (no recipe)")
-        return dumps({"type":"insert_recipes","response":"insertion/update fail"})
+        return False
 
     for recipe in recipes:
         criteria = {"id":recipes['id']}
@@ -76,37 +41,29 @@ def insert_recipes(recipes):
                     continue
                 RecipeCol.update_one(criteria,addChefs)
             continue
-        
-        RecipeCol.insert(recipe)
-
-    return dumps({"type": "insert_menus", "response": "insertion/update success"})
-
-
-def query_menus(keyWord):
-    return dumps({"type": "query_menus", "response": "menus~"})
-
-
-def query_recipes(keyWord):
-    return dumps({"type": "query_recipes", "response": "recipes~"})
+        RecipeCol.insert(recipe) 
+    return True
 
 
 def query_menu(id):
-    global MenuCol
+    global RecipeCol
     query = {"id": id}
-    menu = MenuCol.find(query).limit(1)
-    return dumps({"type": "query_menu", "response": menu})
+    result = RecipeCol.find(query).limit(1)[0]['menu']
+    return result
+
+def query_recipe_step_no(id,stepNo):
+    global RecipeCol
+    query = {"id": id}
+    result = RecipeCol.find(query).limit(1)[0]['steps'][stepNo]
+    return result
 
 def query_recipe(id):
     global RecipeCol
     query = {"id": id}
-    recipe = RecipeCol.find(query).limit(1)
-    return dumps({"type": "query_recipe", "response": recipe})
+    result = RecipeCol.find(query).limit(1)[0]['steps']
+    return result
 
-
-def recommend_api(data,keyWord):
-    recommendation =""
-    if keyWord == "menu":
-        recommendation = recommendMenu(data['menu'])
-    else:
-        recommendation = recommendRecipe(data['recipe'])
-    return recommendation
+def query_recipes_all():
+    global RecipeCol
+    result = list(RecipeCol.find({}))
+    return result
