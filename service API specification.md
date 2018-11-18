@@ -20,3 +20,12 @@ def previousStep(recipeId,stepNo):
 def numberStep(recipeId,stepNo):
     param : recipeId {{int}},stepNo{{int}}
     res : recipeStep {{string}}, stepNo {{int}}
+
+
+def numberStepByMenu(recipeMenu,stepNo):
+    param : recipeMenu {{int}},stepNo{{int}}
+    res : recipeStep {{string}}, stepNo {{int}}
+
+def getIngredientsByMenu(recipeMenu):
+    param : recipeMenu {{int}}
+    res : ingredients {{list(string)}}
