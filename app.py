@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, session
 from service.recipeService import recommendMenu
+
 app = Flask(__name__)
 
 tmpRecipe = {
@@ -34,6 +35,7 @@ def health():
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
     menu = recommendMenu()
+    session['menu'] = menu
     res = {
         "version": "1.0",
         "resultCode": "OK",
