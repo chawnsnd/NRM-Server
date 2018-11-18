@@ -8,6 +8,7 @@ from dao.recipeDao import *
 #use recipeDao only
 def recommendMenu():
     RecipesInDB = query_recipes_all()
+    print(RecipesInDB)
     recommended = RecipesInDB[randint(0,len(RecipesInDB)-1)]
     return recommended['menu']
 

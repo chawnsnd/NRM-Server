@@ -12,9 +12,10 @@ def health():
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
-    req = request.json
+#    req = request.json
+    print("request ok")
     menu = recommendMenu()
-    session['menu'] = menu
+#    session['menu'] = menu
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -22,6 +23,7 @@ def answerMenuRecommendation():
             "menuName": menu
         }
     }
+    print("response")
     return jsonify(res)
     
 #2. 레시피 추천
@@ -152,8 +154,8 @@ def answerNextStep():
 #5. 좋아요 싫어요는 서버에서 할게 아니지?
 
 if __name__ == '__main__':
-    # app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
-    app.run(port=5000)
+    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    #app.run(port=5000)
 
 # #셰프명으로 레시피 랜덤추천
 # @app.route("/recommendRecipeByChef", methods=["POST"])

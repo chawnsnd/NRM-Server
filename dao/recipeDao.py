@@ -6,7 +6,7 @@ import json
 import pymongo
 import sys
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["NRMDB"]
+mydb = myclient["NUGUDB"]
 RecipeCol = mydb["TestRecipeCollection"]
 
 
