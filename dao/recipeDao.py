@@ -56,7 +56,7 @@ def query_recipe_step_no(id,stepNo):
 def query_recipe_with_id(id):
     global RecipeCol
     query = {"id": id}
-    result = RecipeCol.find(query).limit(1)[0]['steps']
+    result = RecipeCol.find(query).limit(1)[0]
     return result
 
 def query_recipes_all():
@@ -74,8 +74,27 @@ def query_ingredients_with_menu(menu):
     query = {"menu": menu}
     return RecipeCol.find(query).limit(1)[0]['ingredients']
 
+def query_recipeName_with_menu(menu):
+    global RecipeCol
+    query = {"menu": menu}
+    result = RecipeCol.find(query).limit(1)[0]['name']
+    return result
+
+def query_recipeName_with_menu_and_chef(menu, chef):
+    global RecipeCol
+    query = {"$and":[{"menu": menu}, {"chef":chef}]}
+    result = RecipeCol.find(query).limit(1)[0]['name']
+    return result
+
 def query_recipe_with_menu(menu):
     global RecipeCol
     query = {"menu": menu}
-    result = RecipeCol.find(query).limit(1)[0]['steps']
+    result = RecipeCol.find(query).limit(1)[0]
     return result
+
+def query_recipe_with_menu_and_chef(menu, chef):
+    global RecipeCol
+    query = {"$and":[{"menu": menu}, {"chef":chef}]}
+    result = RecipeCol.find(query).limit(1)[0]
+    return result
+

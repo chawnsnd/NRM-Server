@@ -61,4 +61,27 @@ def getIngredientsByMenu(recipeMenu):
     if ingredients is None:
         return False
     return ingredients
-    
+
+def getRecipeNameByMenu(recipeMenu):
+    recipeName = query_recipeName_with_menu(recipeMenu)
+    if recipeName is None:
+        return False
+    return recipeName
+
+def getRecipeNameByMenuAndChef(recipeMenu, chef):
+    recipeName = query_recipeName_with_menu_and_chef(recipeMenu,chef)
+    if recipeName is None:
+        return False
+    return recipeName
+
+def getRecipeByMenu(recipeMenu):
+    recipe = query_recipe_with_menu(recipeMenu)
+    if recipe is None:
+        return False
+    return recipe
+
+def getRecipeByMenuAndChef(recipeMenu, chef):
+    recipe = query_recipe_with_menu_and_chef(recipeMenu,chef)
+    if recipe is None:
+        return False
+    return recipe
