@@ -38,7 +38,7 @@ def answerMenuRecommendation():
 def answerRecipe():
     req = request.json
     res = {
-        "booleanMenuExistWhenAnswerRecipe": checkMenuExist()
+        # "booleanMenuExistWhenAnswerRecipe": checkMenuExist()
     }
     return jsonify(res)
     # print("menuExist: "+menuExist)
