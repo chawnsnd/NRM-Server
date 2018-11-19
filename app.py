@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, Response, session
+from flask import Flask, request, jsonify, Response
 from service.recipeService import *
 from dao.recipeDao import *
 
 app = Flask(__name__)
+session ={}
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
@@ -22,6 +23,7 @@ def answerMenuRecommendation():
         }
     }
     print("response")
+    print(session['menuName'])
     return jsonify(res)
     
 #2. 레시피 추천
@@ -55,24 +57,14 @@ def answerRecipe():
             }
         }
     #셰프이름만 받을 때
-    elif 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
-        print("셰프이름만 받을 때")
-        chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
-        recipe = getRecipeByChef(chefName) #이거 만들어야 됨
-        session['recipeName'] = recipe['name']
-        session['menuName'] = recipe['menu']
-        session['chefName'] = chefName
-        session['step'] = recipe['steps'][0]
-        res = {
-            "version": "1.0",
-            "resultCode": "OK",
-            "output": {
-                "chefNameWhenAnswerRecipe": session['chefName'],
-                "recipeNameWhenAnswerRecipe": session['recipeName'],
-                "stepWhenAnswerRecipe": session['step'],
-                "menuExist": menuExist
-            }
-        }
+    # elif 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
+    #     print("셰프이름만 받을 때")
+    #     res = {
+    #         "version": "1.0",
+    #         "resultCode": "OK",
+    #         "output": {
+    #         }
+    #     }
     #메뉴이름만 받을 때
     elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
         print("메뉴이름만 받을 때")
@@ -129,6 +121,27 @@ def answerRecipe():
                     "menuExist": menuExist
                 }
             }
+    return jsonify(res)
+
+@app.route("/answerRecipeByChef", methods=["POST"])
+def answerRecipeByChef():
+    print("브랜치타고 들어옴")
+    req = request.json
+    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    recipe = getRecipeByChef(chefName) #이거 만들어야 됨
+    session['recipeName'] = recipe['name']
+    session['menuName'] = recipe['menu']
+    session['chefName'] = chefName
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "chefNameWhenAnswerRecipe": session['chefName'],
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
     return jsonify(res)
 
 # #3. 재료묻기
@@ -216,6 +229,12 @@ if __name__ == '__main__':
     app.debug = True
     app.run(port=5000)
 
+def checkMenuExist():
+    if 'menuName' in session:
+        menuExist = "true"
+    else:
+        menuExist = "false"
+    return menuExist
 # #셰프명으로 레시피 랜덤추천
 # @app.route("/recommendRecipeByChef", methods=["POST"])
 # def recommendRecipeByChef():
