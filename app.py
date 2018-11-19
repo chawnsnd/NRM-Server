@@ -161,8 +161,8 @@ def answerRecipeIfMenuExists():
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
-            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            # "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
+            # "recipeNameWhenAnswerRecipe": session['recipeName'],
             "stepWhenAnswerRecipe": session['step']
         }
     }
