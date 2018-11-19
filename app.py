@@ -147,6 +147,26 @@ def answerRecipeWithoutMenu():
     }
     return jsonify(res)
 
+@app.route("/answerRecipeIfMenuExists", methods=["POST"])
+def answerRecipeIfMenuExists():
+    print("브랜치타고 들어옴")
+    req = request.json
+    menuName = session['menuName']
+    recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    session['recipeName'] = recipe['name']
+    session['menuName'] = menuName
+    session['chefName'] = recipe['chef']
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+
 @app.route("/answerRecipeByChef", methods=["POST"])
 def answerRecipeByChef():
     print("브랜치타고 들어옴")
@@ -189,7 +209,7 @@ def answerRecipeByMenu():
     }
     return jsonify(res)
 
-@app.route("/answerRecipeByMenuChef", methods=["POST"])
+@app.route("/answerRecipeByMenuAndChef", methods=["POST"])
 def answerRecipeByMenuAndChef():
     print("메뉴이름이랑 셰프이름 받을 때")
     req = request.json
