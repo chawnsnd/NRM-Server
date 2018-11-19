@@ -18,21 +18,27 @@ def answerMenuRecommendation():
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "menuName":session['menuName']
+            "menuNameWhenAnswerMenu":session['menuName']
         }
     }
+    print("response")
     return jsonify(res)
     
 #2. 레시피 추천
 @app.route("/answerRecipe", methods=["POST"])
 def answerRecipe():
     req = request.json
+    if 'menuName' in session:
+        menuExist = "true"
+    else:
+        menuExist = "false"
+    print("menuExist: "+menuExist)
     #메뉴이름이랑 셰프이름 받을 때
-    if 'menuName' in req['action']['parameters'] and 'chefName' in req['action']['parameters']:
+    if 'menuNameWhenAnswerRecipe' in req['action']['parameters'] and 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
         print("메뉴이름이랑 셰프이름 받을 때")
         chefName = req['action']['parameters']['chefName']['value']
         menuName = req['action']['parameters']['menuName']['value']
-        recipe = query_recipe_with_menu_and_chef(menuName, chefName); #이거 만들어야 됨
+        recipe = getRecipeByMenuAndChef(menuName, chefName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['step'] = recipe['steps'][0]
         session['menuName'] = menuName
@@ -41,17 +47,18 @@ def answerRecipe():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "chefName": session['chefName'],
-                "menuName": session['menuName'],
-                "recipeName": session['recipeName'],
-                "step": session['step']
+                "chefNameWhenAnswerRecipe": session['chefName'],
+                "menuNameWhenAnswerRecipe": session['menuName'],
+                "recipeNameWhenAnswerRecipe": session['recipeName'],
+                "stepWhenAnswerRecipe": session['step'],
+                "menuExist": menuExist
             }
         }
     #셰프이름만 받을 때
-    elif 'chefName' in req['action']['parameters']:
+    elif 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
         print("셰프이름만 받을 때")
         chefName = req['action']['parameters']['chefName']['value']
-        recipe = query_recipe_with_chef(chefName); #이거 만들어야 됨
+        recipe = getRecipeByChef(chefName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['menuName'] = recipe['menu']
         session['chefName'] = chefName
@@ -60,16 +67,17 @@ def answerRecipe():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "chefName": session['chefName'],
-                "recipeName": session['recipeName'],
-                "step": session['step']
+                "chefNameWhenAnswerRecipe": session['chefName'],
+                "recipeNameWhenAnswerRecipe": session['recipeName'],
+                "stepWhenAnswerRecipe": session['step'],
+                "menuExist": menuExist
             }
         }
     #메뉴이름만 받을 때
-    elif 'menuName' in req['action']['parameters']:
+    elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
         print("메뉴이름만 받을 때")
         menuName = req['action']['parameters']['menuName']['value']
-        recipe = query_recipe_with_menu(menuName); #이거 만들어야 됨
+        recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['menuName'] = menuName
         session['chefName'] = recipe['chef']
@@ -78,9 +86,10 @@ def answerRecipe():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "menuName": session['menuName'],
-                "recipeName": session['recipeName'],
-                "step": session['step']
+                "menuNameWhenAnswerRecipe": "session['menuName']",
+                "recipeNameWhenAnswerRecipe": "session['recipeName']",
+                "stepWhenAnswerRecipe": "session['step']",
+                # "menuExist": menuExist
             }
         }
     #메뉴이름, 셰프이름 둘 다 못받음
@@ -90,7 +99,7 @@ def answerRecipe():
         if 'menuName' in session:
             print("이전에 메뉴이름이 세션에 있을 떄")
             menuName = session['menuName']
-            recipe = query_recipe_with_menu(menuName) #이거 만들어야 됨
+            recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
             session['recipeName'] = recipe['name']
             session['chefName'] = recipe['chef']
             session['step'] = recipe['steps'][0]
@@ -98,8 +107,9 @@ def answerRecipe():
                 "version": "1.0",
                 "resultCode": "OK",
                 "output": {
-                    "recipeName": session['recipeName'],
-                    "step": session['step']
+                    "recipeNameWhenAnswerRecipe": session['recipeName'],
+                    "stepWhenAnswerRecipe": session['step'],
+                    "menuExist": menuExist
                 }
             }
         #이전에 메뉴이름이 세션에 없을 떄
@@ -114,87 +124,88 @@ def answerRecipe():
                 "version": "1.0",
                 "resultCode": "OK",
                 "output": {
-                    "recipeName": session['recipeName'],
-                    "step": session['step']
+                    "recipeNameWhenAnswerRecipe": session['recipeName'],
+                    "stepWhenAnswerRecipe": session['step'],
+                    "menuExist": menuExist
                 }
             }
     return jsonify(res)
 
-#3. 재료묻기
-@app.route("/answerIngredients", methods=["POST"])
-def answerIngredients():
-    req = request.json
-    if 'MENU' not in req['action']['parameters']:
-        if 'menu' not in session:
-            res = {
-                "version": "1.0",
-                "resultCode": "BAD"
-            }
-        else:
-            menu = session['menu']
-            recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
-            session['recipe'] = recipe
-            ingredients = recipe.ingredients
-            res = {
-                "version": "1.0",
-                "resultCode": "OK",
-                "output": {
-                    "menu": menu,
-                    "ingredients": recipe
-                }
-            }
-    else:
-        menu = req['action']['parameters']['MENU']['value']
-        recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
-        ingredients = recipe.ingredients
-        res = {
-            "version": "1.0",
-            "resultCode": "OK",
-            "output": {
-                "menu": menu,
-                "ingredients": recipe
-            }
-        }
-    return jsonify(res)
+# #3. 재료묻기
+# @app.route("/answerIngredients", methods=["POST"])
+# def answerIngredients():
+#     req = request.json
+#     if 'MENU' not in req['action']['parameters']:
+#         if 'menu' not in session:
+#             res = {
+#                 "version": "1.0",
+#                 "resultCode": "BAD"
+#             }
+#         else:
+#             menu = session['menu']
+#             recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
+#             session['recipe'] = recipe
+#             ingredients = recipe.ingredients
+#             res = {
+#                 "version": "1.0",
+#                 "resultCode": "OK",
+#                 "output": {
+#                     "menu": menu,
+#                     "ingredients": recipe
+#                 }
+#             }
+#     else:
+#         menu = req['action']['parameters']['MENU']['value']
+#         recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
+#         ingredients = recipe.ingredients
+#         res = {
+#             "version": "1.0",
+#             "resultCode": "OK",
+#             "output": {
+#                 "menu": menu,
+#                 "ingredients": recipe
+#             }
+#         }
+#     return jsonify(res)
 
-#4. 스텝이동
-@app.route("/answerNextStep", methods=["POST"])
-def answerNextStep():
-    req = request.json
-    if 'recipe' not in session:
-        res = {
-            "version": "1.0",
-            "resultCode": "BAD"
-        }
-    else:
-        recipe = session['recipe']
-        if 'state' not in req['action']['parameters'] and 'stepNo' in req['action']['parameters']:
-            stepNo = req['action']['parameters']['stepNo']['value']
-            session['stepNo'] = stepNo
-            recipeStep = recipe.step[stepNo]
-            res = {
-                "version": "1.0",
-                "resultCode": "OK",
-                "output": {
-                    "recipeStep": recipeStep,
-                    "stepNo": stepNo 
-                }
-            }
-        elif 'state' in req['action']['parameters'] and 'stepNo' not in req['action']['parameters']:
-                state = req['action']['parameters']['state']['value']
-                curStepNo = session['stepNo']+state
-                recipeStep = recipe.step[curStepNo]
-                session['stepNo'] = curStepNo
-                res = {
-                    "version": "1.0",
-                    "resultCode": "OK",
-                    "output": {
-                        "recipeStep": recipeStep,
-                        "stepNo": stepNo,
-                        "state": state 
-                    }
-                }
-    return jsonify(res);
+# #4. 스텝이동
+# @app.route("/answerNextStep", methods=["POST"])
+# def answerNextStep():
+#     req = request.json
+#     if 'recipe' not in session:
+#         res = {
+#             "version": "1.0",
+#             "resultCode": "BAD"
+#         }
+#     else:
+#         recipe = session['recipe']
+#         if 'state' not in req['action']['parameters'] and 'stepNo' in req['action']['parameters']:
+#             stepNo = req['action']['parameters']['stepNo']['value']
+#             session['stepNo'] = stepNo
+#             recipeStep = recipe.step[stepNo]
+#             res = {
+#                 "version": "1.0",
+#                 "resultCode": "OK",
+#                 "output": {
+#                     "recipeStep": recipeStep,
+#                     "stepNo": stepNo 
+#                 }
+#             }
+#         elif 'state' in req['action']['parameters'] and 'stepNo' not in req['action']['parameters']:
+#                 state = req['action']['parameters']['state']['value']
+#                 curStepNo = session['stepNo']+state
+#                 recipeStep = recipe.step[curStepNo]
+#                 session['stepNo'] = curStepNo
+#                 res = {
+#                     "version": "1.0",
+#                     "resultCode": "OK",
+#                     "output": {
+#                         "recipeStep": recipeStep,
+#                         "stepNo": stepNo,
+#                         "state": state 
+#                     }
+#                 }
+#     return jsonify(res)
 
 #5. 좋아요 싫어요는 서버에서 할게 아니지?
 
@@ -202,6 +213,7 @@ if __name__ == '__main__':
     # app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
+    app.debug = True
     app.run(port=5000)
 
 # #셰프명으로 레시피 랜덤추천
@@ -213,20 +225,20 @@ if __name__ == '__main__':
 #         "recipeId": tmpRecipe["id"],
 #         "name": tmpRecipe["name"]
 #         }
-#     return jsonify(result);
+#     return jsonify(result)
 
 # #레시피에서스텝찾기
 # @app.route("/answerStepFromRecipeByStepNo", methods=["POST"])
 # def answerStepFromRecipeByStepNo():
 #     req = request.json
 #     # step = req['action']['parameters']['step']['value']
-#     step = 3;
+#     step = 3
 #     result = {
 #         "recipeId": tmpRecipe["id"],
 #         "step": tmpRecipe["steps"][step],
 #         "stepNo": step
 #         }
-#     return jsonify(result);
+#     return jsonify(result)
 
 # #레시피에서재료찾기
 # @app.route("/answerFromIngredientsFromRecipe", methods=["POST"])
@@ -237,4 +249,4 @@ if __name__ == '__main__':
 #         "recipeId": tmpRecipe["id"],
 #         "ingredients": tmpRecipe["ingredients"]
 #         }
-#     return jsonify(result);
+#     return jsonify(result)
