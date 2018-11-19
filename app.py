@@ -29,8 +29,6 @@ def answerMenuRecommendation():
             "menuNameWhenAnswerMenu":session['menuName']
         }
     }
-    print("response")
-    print(session['menuName'])
     return jsonify(res)
 
 #2. 레시피추천
@@ -129,9 +127,54 @@ def answerRecipeByMenuAndChef():
     }
     return jsonify(res)
 
+#2.1. 키워드 없을 때
+@app.route("/answerRecipeWithoutKeyWord", methods=["POST"])
+def answerRecipeWithoutKeyWord():
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
+        }
+    }
+    return jsonify(res)
 
+#2.1.1. 서버에 메뉴 있을 때
+@app.route("/answerRecipeIfServerMenuExists", methods=["POST"])
+def answerRecipeIfServerMenuExists():
+    menuName = session['menuName']
+    recipe = getRandomRecipeByMenu(menuName)
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
 
-
+#2.1.2. 서버에 메뉴 없을 때
+@app.route("/answerRecipeIfServerMenuNone", methods=["POST"])
+def answerRecipeIfServerMenuNone():
+    recipe = recommendRecipe()
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
 
 
 # #3. 재료묻기
