@@ -66,24 +66,24 @@ def answerRecipe():
     #         }
     #     }
     #메뉴이름만 받을 때
-    elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
-        print("메뉴이름만 받을 때")
-        menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-        recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
-        session['recipeName'] = recipe['name']
-        session['menuName'] = menuName
-        session['chefName'] = recipe['chef']
-        session['step'] = recipe['steps'][0]
-        res = {
-            "version": "1.0",
-            "resultCode": "OK",
-            "output": {
-                "menuNameWhenAnswerRecipe": session['menuName'],
-                "recipeNameWhenAnswerRecipe": session['recipeName'],
-                "stepWhenAnswerRecipe": session['step'],
-                "menuExist": menuExist
-            }
-        }
+    # elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
+    #     print("메뉴이름만 받을 때")
+    #     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
+    #     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    #     session['recipeName'] = recipe['name']
+    #     session['menuName'] = menuName
+    #     session['chefName'] = recipe['chef']
+    #     session['step'] = recipe['steps'][0]
+    #     res = {
+    #         "version": "1.0",
+    #         "resultCode": "OK",
+    #         "output": {
+    #             "menuNameWhenAnswerRecipe": session['menuName'],
+    #             "recipeNameWhenAnswerRecipe": session['recipeName'],
+    #             "stepWhenAnswerRecipe": session['step'],
+    #             "menuExist": menuExist
+    #         }
+    #     }
     #메뉴이름, 셰프이름 둘 다 못받음
     else:
         print("메뉴이름, 셰프이름 둘 다 못받음")
@@ -123,6 +123,23 @@ def answerRecipe():
             }
     return jsonify(res)
 
+@app.route("/answerRecipeWithoutMenu", methods=["POST"])
+def answerRecipeWithoutMenu():
+    menuExist = checkMenuExist()
+    req = request.json
+    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "booleanMenuExistWhenAnswerRecipe": menuExist,
+            "menuNameWhenAnswerRecipe": menuName,
+            "chefNameWhenAnswerRecipe": chefName
+        }
+    }
+    return jsonify(res)
+
 @app.route("/answerRecipeByChef", methods=["POST"])
 def answerRecipeByChef():
     print("브랜치타고 들어옴")
@@ -143,6 +160,49 @@ def answerRecipeByChef():
         }
     }
     return jsonify(res)
+
+@app.route("/answerRecipeByMenu", methods=["POST"])
+def answerRecipeByMenu():
+    print("브랜치타고 들어옴")
+    req = request.json
+    menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
+    recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = menuName
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "menuNameWhenAnswerRecipe": session['menuName'],
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
+
+@app.route("/answerRecipeByMenuChef", methods=["POST"])
+def answerRecipeByMenuAndChef():
+    print("메뉴이름이랑 셰프이름 받을 때")
+    req = request.json
+    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
+    recipe = getRecipeByMenuAndChef(menuName, chefName) #이거 만들어야 됨
+    session['recipeName'] = recipe['name']
+    session['step'] = recipe['steps'][0]
+    session['menuName'] = menuName
+    session['chefName'] = chefName
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "chefNameWhenAnswerRecipe": session['chefName'],
+            "menuNameWhenAnswerRecipe": session['menuName'],
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
 
 # #3. 재료묻기
 # @app.route("/answerIngredients", methods=["POST"])
