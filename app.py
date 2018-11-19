@@ -32,15 +32,81 @@ def answerMenuRecommendation():
     print("response")
     print(session['menuName'])
     return jsonify(res)
-    
-# #2. 레시피 추천
-# @app.route("/answerRecipe", methods=["POST"])
-# def answerRecipe():
-#     req = request.json
-#     res = {
-#         # "booleanMenuExistWhenAnswerRecipe": checkMenuExist()
-#     }
-#     return jsonify(res)
+
+#2. 레시피추천
+#2.1. 키워드 있을 때
+#2.1.1. 메뉴 키워드
+@app.route("/answerRecipeByMenu", methods=["POST"])
+def answerRecipeByMenu():
+    req = request.json
+    menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
+    recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = menuName
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
+
+#2.1.2. 셰프키워드
+@app.route("/answerRecipeByChef", methods=["POST"])
+def answerRecipeByChef():
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
+        }
+    }
+    return jsonify(res)
+
+#2.1.2.1. 서버에 메뉴 있을 때
+@app.route("/answerRecipeByChefIfServerMenuExist", methods=["POST"])
+def answerRecipeByChefIfServerMenuExist():
+    req = request.json
+    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    menuName = session['menuName']
+    recipe = getRecipeByMenuAndChef(menuName, chefName)
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
+
+#2.1.2.2. 서버에 메뉴 없을 때
+@app.route("/answerRecipeByChefIfServerMenuNone", methods=["POST"])
+def answerRecipeByChefIfServerMenuNone():
+    req = request.json
+    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    recipe = getRandomRecipeByChef(chefName)
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
+    session['step'] = recipe['steps'][0]
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "recipeNameWhenAnswerRecipe": session['recipeName'],
+            "stepWhenAnswerRecipe": session['step']
+        }
+    }
+    return jsonify(res)
 
 @app.route("/answerRecipeWithoutMenu", methods=["POST"])
 def answerRecipeWithoutMenu():
@@ -61,6 +127,14 @@ def answerRecipeIfMenuExists():
     menuName = session['menuName']
     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
     session['recipeName'] = recipe['name']
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
+        }
+    }
+    return jsonify(res)
     session['menuName'] = menuName
     session['chefName'] = recipe['chef']
     session['step'] = recipe['steps'][0]
@@ -75,43 +149,9 @@ def answerRecipeIfMenuExists():
     }
     return jsonify(res)
 
-@app.route("/answerRecipeByChef", methods=["POST"])
-def answerRecipeByChef():
-    res = {
-        "version": "1.0",
-        "resultCode": "OK",
-        "output": {
-            "booleanMenuExistWhenAnswerRecipe": checkMenuExist(),
-        }
-    }
-    return jsonify(res)
 
-@app.route("/answerRecipeByChefIfServerMenuExist", methods=["POST"])
-def answerRecipeByChefIfServerMenuExist():
-    return "OK"
 
-@app.route("/answerRecipeByChefIfServerMenuNone", methods=["POST"])
-def answerRecipeByChefIfServerMenuNone():
-    return "OK"
 
-@app.route("/answerRecipeByMenu", methods=["POST"])
-def answerRecipeByMenu():
-    req = request.json
-    menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-    recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
-    session['recipeName'] = recipe['name']
-    session['chefName'] = recipe['chef']
-    session['menuName'] = menuName
-    session['step'] = recipe['steps'][0]
-    res = {
-        "version": "1.0",
-        "resultCode": "OK",
-        "output": {
-            "recipeNameWhenAnswerRecipe": session['recipeName'],
-            "stepWhenAnswerRecipe": session['step']
-        }
-    }
-    return jsonify(res)
 
 @app.route("/answerRecipeByMenuAndChef", methods=["POST"])
 def answerRecipeByMenuAndChef():

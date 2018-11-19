@@ -104,6 +104,12 @@ def query_recipe_with_chef(chef):
     result = RecipeCol.find(query).limit(1)[0]
     return result
 
+def query_recipes_with_chef(chef):
+    global RecipeCol
+    query = {"chef": chef}
+    result = RecipeCol.find(query)
+    return result
+
 def query_recipe_with_menu_and_chef(menu, chef):
     global RecipeCol
     query = {"$and":[{"menu": menu}, {"chef":chef}]}

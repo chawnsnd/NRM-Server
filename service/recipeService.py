@@ -96,6 +96,13 @@ def getRecipeByChef(recipeChef):
         return False
     return recipe
 
+def getRandomRecipeByChef(recipeChef):
+    recipes = list(query_recipes_with_chef(recipeChef))
+    if recipes is None:
+        return False
+    recipe = recipes[randint(0,len(recipes)-1)]
+    return recipe
+
 def getRecipeByMenuAndChef(recipeMenu, chef):
     recipe = query_recipe_with_menu_and_chef(recipeMenu,chef)
     if recipe is None:
