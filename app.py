@@ -36,8 +36,8 @@ def answerRecipe():
     #메뉴이름이랑 셰프이름 받을 때
     if 'menuNameWhenAnswerRecipe' in req['action']['parameters'] and 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
         print("메뉴이름이랑 셰프이름 받을 때")
-        chefName = req['action']['parameters']['chefName']['value']
-        menuName = req['action']['parameters']['menuName']['value']
+        chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+        menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
         recipe = getRecipeByMenuAndChef(menuName, chefName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['step'] = recipe['steps'][0]
@@ -57,7 +57,7 @@ def answerRecipe():
     #셰프이름만 받을 때
     elif 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
         print("셰프이름만 받을 때")
-        chefName = req['action']['parameters']['chefName']['value']
+        chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
         recipe = getRecipeByChef(chefName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['menuName'] = recipe['menu']
@@ -76,7 +76,7 @@ def answerRecipe():
     #메뉴이름만 받을 때
     elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
         print("메뉴이름만 받을 때")
-        menuName = req['action']['parameters']['menuName']['value']
+        menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
         recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
         session['recipeName'] = recipe['name']
         session['menuName'] = menuName
@@ -86,10 +86,10 @@ def answerRecipe():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "menuNameWhenAnswerRecipe": "session['menuName']",
-                "recipeNameWhenAnswerRecipe": "session['recipeName']",
-                "stepWhenAnswerRecipe": "session['step']",
-                # "menuExist": menuExist
+                "menuNameWhenAnswerRecipe": session['menuName'],
+                "recipeNameWhenAnswerRecipe": session['recipeName'],
+                "stepWhenAnswerRecipe": session['step'],
+                "menuExist": menuExist
             }
         }
     #메뉴이름, 셰프이름 둘 다 못받음
