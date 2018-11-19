@@ -37,98 +37,70 @@ def answerMenuRecommendation():
 @app.route("/answerRecipe", methods=["POST"])
 def answerRecipe():
     req = request.json
-    if 'menuName' in session:
-        menuExist = "true"
-    else:
-        menuExist = "false"
-    print("menuExist: "+menuExist)
-    #메뉴이름이랑 셰프이름 받을 때
-    if 'menuNameWhenAnswerRecipe' in req['action']['parameters'] and 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
-        print("메뉴이름이랑 셰프이름 받을 때")
-        chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
-        menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-        recipe = getRecipeByMenuAndChef(menuName, chefName) #이거 만들어야 됨
-        session['recipeName'] = recipe['name']
-        session['step'] = recipe['steps'][0]
-        session['menuName'] = menuName
-        session['chefName'] = chefName
-        res = {
-            "version": "1.0",
-            "resultCode": "OK",
-            "output": {
-                "chefNameWhenAnswerRecipe": session['chefName'],
-                "menuNameWhenAnswerRecipe": session['menuName'],
-                "recipeNameWhenAnswerRecipe": session['recipeName'],
-                "stepWhenAnswerRecipe": session['step'],
-                "menuExist": menuExist
-            }
-        }
-    #셰프이름만 받을 때
-    # elif 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
-    #     print("셰프이름만 받을 때")
-    #     res = {
-    #         "version": "1.0",
-    #         "resultCode": "OK",
-    #         "output": {
-    #         }
-    #     }
-    #메뉴이름만 받을 때
-    # elif 'menuNameWhenAnswerRecipe' in req['action']['parameters']:
-    #     print("메뉴이름만 받을 때")
+    res = {
+        "booleanMenuExistWhenAnswerRecipe": checkMenuExist()
+    }
+    return jsonify(res)
+    # print("menuExist: "+menuExist)
+    # #메뉴이름이랑 셰프이름 받을 때
+    # if 'menuNameWhenAnswerRecipe' in req['action']['parameters'] and 'chefNameWhenAnswerRecipe' in req['action']['parameters']:
+    #     print("메뉴이름이랑 셰프이름 받을 때")
+    #     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     #     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-    #     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    #     recipe = getRecipeByMenuAndChef(menuName, chefName) #이거 만들어야 됨
     #     session['recipeName'] = recipe['name']
-    #     session['menuName'] = menuName
-    #     session['chefName'] = recipe['chef']
     #     session['step'] = recipe['steps'][0]
+    #     session['menuName'] = menuName
+    #     session['chefName'] = chefName
     #     res = {
     #         "version": "1.0",
     #         "resultCode": "OK",
     #         "output": {
+    #             "chefNameWhenAnswerRecipe": session['chefName'],
     #             "menuNameWhenAnswerRecipe": session['menuName'],
     #             "recipeNameWhenAnswerRecipe": session['recipeName'],
     #             "stepWhenAnswerRecipe": session['step'],
     #             "menuExist": menuExist
     #         }
     #     }
-    #메뉴이름, 셰프이름 둘 다 못받음
-    else:
-        print("메뉴이름, 셰프이름 둘 다 못받음")
-        #이전에 메뉴이름이 세션에 있을 떄
-        if 'menuName' in session:
-            print("이전에 메뉴이름이 세션에 있을 떄")
-            menuName = session['menuName']
-            recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
-            session['recipeName'] = recipe['name']
-            session['chefName'] = recipe['chef']
-            session['step'] = recipe['steps'][0]
-            res = {
-                "version": "1.0",
-                "resultCode": "OK",
-                "output": {
-                    "recipeNameWhenAnswerRecipe": session['recipeName'],
-                    "stepWhenAnswerRecipe": session['step'],
-                    "menuExist": menuExist
-                }
-            }
-        #이전에 메뉴이름이 세션에 없을 떄
-        else:
-            print("이전에 메뉴이름이 세션에 없을 떄")
-            recipe = recommendRecipe()
-            session['menuName'] = recipe['menu']
-            session['recipeName'] = recipe['name']
-            session['chefName'] = recipe['chef']
-            session['step'] = recipe['steps'][0]
-            res = {
-                "version": "1.0",
-                "resultCode": "OK",
-                "output": {
-                    "recipeNameWhenAnswerRecipe": session['recipeName'],
-                    "stepWhenAnswerRecipe": session['step'],
-                    "menuExist": menuExist
-                }
-            }
-    return jsonify(res)
+    # #메뉴이름, 셰프이름 둘 다 못받음
+    # else:
+    #     print("메뉴이름, 셰프이름 둘 다 못받음")
+    #     #이전에 메뉴이름이 세션에 있을 떄
+    #     if 'menuName' in session:
+    #         print("이전에 메뉴이름이 세션에 있을 떄")
+    #         menuName = session['menuName']
+    #         recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    #         session['recipeName'] = recipe['name']
+    #         session['chefName'] = recipe['chef']
+    #         session['step'] = recipe['steps'][0]
+    #         res = {
+    #             "version": "1.0",
+    #             "resultCode": "OK",
+    #             "output": {
+    #                 "recipeNameWhenAnswerRecipe": session['recipeName'],
+    #                 "stepWhenAnswerRecipe": session['step'],
+    #                 "menuExist": menuExist
+    #             }
+    #         }
+    #     #이전에 메뉴이름이 세션에 없을 떄
+    #     else:
+    #         print("이전에 메뉴이름이 세션에 없을 떄")
+    #         recipe = recommendRecipe()
+    #         session['menuName'] = recipe['menu']
+    #         session['recipeName'] = recipe['name']
+    #         session['chefName'] = recipe['chef']
+    #         session['step'] = recipe['steps'][0]
+    #         res = {
+    #             "version": "1.0",
+    #             "resultCode": "OK",
+    #             "output": {
+    #                 "recipeNameWhenAnswerRecipe": session['recipeName'],
+    #                 "stepWhenAnswerRecipe": session['step'],
+    #                 "menuExist": menuExist
+    #             }
+    #         }
+    # return jsonify(res)
 
 @app.route("/answerRecipeWithoutMenu", methods=["POST"])
 def answerRecipeWithoutMenu():
