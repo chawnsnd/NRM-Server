@@ -134,7 +134,7 @@ def answerRecipe():
 def answerRecipeWithoutMenu():
     menuExist = checkMenuExist()
     req = request.json
-    chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
+    # chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     # menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
     res = {
         "version": "1.0",
@@ -142,7 +142,7 @@ def answerRecipeWithoutMenu():
         "output": {
             "booleanMenuExistWhenAnswerRecipe": menuExist,
             # "menuNameWhenAnswerRecipe": menuName,
-            "chefNameWhenAnswerRecipe": chefName
+            # "chefNameWhenAnswerRecipe": chefName
         }
     }
     return jsonify(res)
