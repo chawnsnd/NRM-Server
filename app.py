@@ -166,6 +166,7 @@ def answerRecipeIfMenuExists():
             "stepWhenAnswerRecipe": session['step']
         }
     }
+    return jsonify(res)
 
 @app.route("/answerRecipeByChef", methods=["POST"])
 def answerRecipeByChef():
