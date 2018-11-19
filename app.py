@@ -102,6 +102,7 @@ def answerRecipe():
     #         }
     # return jsonify(res)
 
+
 @app.route("/answerRecipeWithoutMenu", methods=["POST"])
 def answerRecipeWithoutMenu():
     menuExist = checkMenuExist()
@@ -163,7 +164,6 @@ def answerRecipeByChef():
 
 @app.route("/answerRecipeByMenu", methods=["POST"])
 def answerRecipeByMenu():
-    print("브랜치타고 들어옴")
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
@@ -175,7 +175,6 @@ def answerRecipeByMenu():
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "menuNameWhenAnswerRecipe": session['menuName'],
             "recipeNameWhenAnswerRecipe": session['recipeName'],
             "stepWhenAnswerRecipe": session['step']
         }
