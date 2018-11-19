@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
 import json
-import matplotlib.pyplot 
 from random import randint
 from dao.recipeDao import *
 
