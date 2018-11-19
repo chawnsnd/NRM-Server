@@ -88,9 +88,11 @@ def answerRecipeByChef():
 
 @app.route("/answerRecipeByChefIfServerMenuExist", methods=["POST"])
 def answerRecipeByChefIfServerMenuExist():
+    return "OK"
 
 @app.route("/answerRecipeByChefIfServerMenuNone", methods=["POST"])
 def answerRecipeByChefIfServerMenuNone():
+    return "OK"
 
 @app.route("/answerRecipeByMenu", methods=["POST"])
 def answerRecipeByMenu():
