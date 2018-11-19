@@ -5,6 +5,13 @@ from dao.recipeDao import *
 app = Flask(__name__)
 session ={}
 
+def checkMenuExist():
+    if 'menuName' in session:
+        menuExist = "true"
+    else:
+        menuExist = "false"
+    return menuExist
+
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
 def health():
@@ -289,12 +296,6 @@ if __name__ == '__main__':
     app.debug = True
     app.run(port=5000)
 
-def checkMenuExist():
-    if 'menuName' in session:
-        menuExist = "true"
-    else:
-        menuExist = "false"
-    return menuExist
 # #셰프명으로 레시피 랜덤추천
 # @app.route("/recommendRecipeByChef", methods=["POST"])
 # def recommendRecipeByChef():
