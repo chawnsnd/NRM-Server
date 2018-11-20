@@ -174,7 +174,25 @@ def answerRecipeIfServerMenuNone():
 #3.1. 키워드가 없을 때
 @app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
 def answerIngredient():
-    return "서버 세션에 재료나 레시피가 있는지?"
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {}
+    }
+    if 'recipe' in session:
+        res['output'] : {
+            "sessionState": "recipeExists"
+        }
+    elif 'menu' in session:
+        res['output'] : {
+            "sessionState": "menuExists"
+        }
+    else:
+        res['output'] : {
+            "sessionState": "none"
+        }
+    return jsonify(res)
+    # return "서버 세션에 재료나 레시피가 있는지?"
 #3.1.1. 서버에 메뉴까지 있을 때
 @app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
 def answerIngredientsIfServerMenuExists():
