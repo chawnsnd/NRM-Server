@@ -64,7 +64,6 @@ def answerRecipeByChef():
         }
     }
     return jsonify(res)
-
 #2.1.2.1. 서버에 메뉴 있을 때
 @app.route("/answerRecipeByChefIfServerMenuExist", methods=["POST"])
 def answerRecipeByChefIfServerMenuExist():
@@ -85,7 +84,6 @@ def answerRecipeByChefIfServerMenuExist():
         }
     }
     return jsonify(res)
-
 #2.1.2.2. 서버에 메뉴 없을 때
 @app.route("/answerRecipeByChefIfServerMenuNone", methods=["POST"])
 def answerRecipeByChefIfServerMenuNone():
@@ -105,7 +103,6 @@ def answerRecipeByChefIfServerMenuNone():
         }
     }
     return jsonify(res)
-
 #2.1.3. 메뉴&셰프키워드
 @app.route("/answerRecipeByMenuAndChef", methods=["POST"])
 def answerRecipeByMenuAndChef():
@@ -126,7 +123,6 @@ def answerRecipeByMenuAndChef():
         }
     }
     return jsonify(res)
-
 #2.1. 키워드 없을 때
 @app.route("/answerRecipeWithoutKeyWord", methods=["POST"])
 def answerRecipeWithoutKeyWord():
@@ -138,7 +134,6 @@ def answerRecipeWithoutKeyWord():
         }
     }
     return jsonify(res)
-
 #2.1.1. 서버에 메뉴 있을 때
 @app.route("/answerRecipeIfServerMenuExists", methods=["POST"])
 def answerRecipeIfServerMenuExists():
@@ -157,7 +152,6 @@ def answerRecipeIfServerMenuExists():
         }
     }
     return jsonify(res)
-
 #2.1.2. 서버에 메뉴 없을 때
 @app.route("/answerRecipeIfServerMenuNone", methods=["POST"])
 def answerRecipeIfServerMenuNone():
@@ -176,43 +170,29 @@ def answerRecipeIfServerMenuNone():
     }
     return jsonify(res)
 
+#3. 재료안내
+#3.1. 키워드가 없을 때
+@app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
+def answerIngredient():
+    return "서버 세션에 재료나 레시피가 있는지?"
+#3.1.1. 서버에 메뉴까지 있을 때
+@app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
+def answerIngredientsIfServerMenuExists():
+    return "서버 메뉴에 해당하는 랜덤 레시피의 재료"
+#3.1.2. 서버에 레시피까지 있을 때
+@app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
+def answerIngredientsIfServerRecipeExists():
+    return "서버 레시피에 해당하는 재료"
+#3.2. 키워드가 있을 때
+#3.2.1. 키워드가 레시피일 때
+@app.route("/answerIngredientsByRecipe", methods=["POST"])
+def answerIngredientsByRecipe():
+    return "키워드로 받은 레시피의 재료"
+#3.2.2. 키워드가 메뉴일 때
+@app.route("/answerIngredientsByMenu", methods=["POST"])
+def answerIngredientsByMenu():
+    return "키워드로 받은 메뉴에 해당하는 랜덤 레시피의 재료"
 
-# #3. 재료묻기
-# @app.route("/answerIngredients", methods=["POST"])
-# def answerIngredients():
-#     req = request.json
-#     if 'MENU' not in req['action']['parameters']:
-#         if 'menu' not in session:
-#             res = {
-#                 "version": "1.0",
-#                 "resultCode": "BAD"
-#             }
-#         else:
-#             menu = session['menu']
-#             recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
-#             session['recipe'] = recipe
-#             ingredients = recipe.ingredients
-#             res = {
-#                 "version": "1.0",
-#                 "resultCode": "OK",
-#                 "output": {
-#                     "menu": menu,
-#                     "ingredients": recipe
-#                 }
-#             }
-#     else:
-#         menu = req['action']['parameters']['MENU']['value']
-#         recipe = recommendRecipeByMenu(menu) #이거 만들어야 됨
-#         ingredients = recipe.ingredients
-#         res = {
-#             "version": "1.0",
-#             "resultCode": "OK",
-#             "output": {
-#                 "menu": menu,
-#                 "ingredients": recipe
-#             }
-#         }
-#     return jsonify(res)
 
 # #4. 스텝이동
 # @app.route("/answerNextStep", methods=["POST"])
