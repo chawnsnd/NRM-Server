@@ -342,9 +342,10 @@ def moveStepByStepNo():
 #6.1. 서버에 레시피가 있는 경우
 @app.route("/moveStepByStepNoIfServerRecipeExists", methods=["POST"])
 def moveStepByStepNoIfServerRecipeExists():
+    req = request.json
+    reqStepNo = req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value'] - 1
     recipeName = session['recipeName']
-    oldStepNo = session['stepNo']
-    step, newStepNo = numberStep(recipeName, oldStepNo)
+    step, newStepNo = numberStep(recipeName, reqStepNo)
     session['step'] = step
     session['stepNo'] = newStepNo
     res = {
