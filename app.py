@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, Response
 from service.recipeService import *
 from dao.recipeDao import *
-from route.menu import *
 
 app = Flask(__name__)
 session ={}
