@@ -212,7 +212,17 @@ def answerIngredientsIfServerMenuExists():
 #3.1.2. 서버에 레시피까지 있을 때
 @app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
 def answerIngredientsIfServerRecipeExists():
-    return "서버 레시피에 해당하는 재료"
+    recipeName = session['recipeName']
+    recipe = getRecipeByRecipe(recipeName)
+    ingredients = " ".join(str(x) for x in recipe['ingredients'])
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "ingredientsWhenAnswerIngredients" : ingredients
+        }
+    }
+    return jsonify(res)
 #3.2. 키워드가 있을 때
 #3.2.1. 키워드가 레시피일 때
 @app.route("/answerIngredientsByRecipe", methods=["POST"])

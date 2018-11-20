@@ -122,3 +122,8 @@ def query_recipe_with_menu_and_chef(menu, chef):
     result = RecipeCol.find(query).limit(1)[0]
     return result
 
+def query_recipe_with_recipe(recipe):
+    global RecipeCol
+    query = {"name": recipe}
+    result = RecipeCol.find(query).limit(1)[0]
+    return result

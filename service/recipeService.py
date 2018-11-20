@@ -115,3 +115,9 @@ def getRecipeByMenuAndChef(recipeMenu, chef):
     if recipe is None:
         return False
     return recipe
+
+def getRecipeByRecipe(recipeName):
+    recipe = query_recipe_with_recipe(recipeName)
+    if recipe is None:
+        return False
+    return recipe
