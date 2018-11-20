@@ -143,6 +143,7 @@ def previousStep(recipeName,stepNo):
 
 def numberStep(recipeName,stepNo):
     recipe = query_recipe_with_recipe(recipeName)
+    recipeStep = recipe['steps']
     if stepNo <0 or stepNo >= len(recipe):
         return False , 0
     step = recipeStep[stepNo]
