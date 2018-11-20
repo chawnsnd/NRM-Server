@@ -18,19 +18,19 @@ def checkMenuExist():
 def health():
     return Response("OK", status=200)
 
-# #1. 메뉴추천
-# @app.route("/answerMenuRecommendation", methods=["POST"])
-# def answerMenuRecommendation():
-#     recipe = recommendRecipe()
-#     session['menuName'] = recipe['menu']
-#     res = {
-#         "version": "1.0",
-#         "resultCode": "OK",
-#         "output": {
-#             "menuNameWhenAnswerMenu":session['menuName']
-#         }
-#     }
-#     return jsonify(res)
+#1. 메뉴추천
+@app.route("/answerMenuRecommendation", methods=["POST"])
+def answerMenuRecommendation():
+    recipe = recommendRecipe()
+    session['menuName'] = recipe['menu']
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "menuNameWhenAnswerMenu":session['menuName']
+        }
+    }
+    return jsonify(res)
 
 #2. 레시피추천
 #2.1. 키워드 있을 때
