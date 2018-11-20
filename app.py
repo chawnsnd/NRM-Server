@@ -232,11 +232,25 @@ def answerIngredientsIfServerRecipeExists():
 #3.2.1. 키워드가 레시피일 때
 @app.route("/answerIngredientsByRecipe", methods=["POST"])
 def answerIngredientsByRecipe():
-    return "키워드로 받은 레시피의 재료"
+    return "키워드로 받은 레시피의 재료//준비중인 기능??"
 #3.2.2. 키워드가 메뉴일 때
 @app.route("/answerIngredientsByMenu", methods=["POST"])
 def answerIngredientsByMenu():
-    return "키워드로 받은 메뉴에 해당하는 랜덤 레시피의 재료"
+    req = request.json
+    menuName = req['action']['parameters']['menuNameWhenAnswerIngredient']['value']
+    recipe = getRandomRecipeByMenu(menuName)
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
+    ingredients = " ".join(str(x) for x in recipe['ingredients'])
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "ingredientsWhenMenuExists" : ingredients
+        }
+    }
+    return jsonify(res)
 
 
 # #4. 스텝이동
