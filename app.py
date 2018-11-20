@@ -197,8 +197,18 @@ def answerIngredient():
 #3.1.1. 서버에 메뉴까지 있을 때
 @app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
 def answerIngredientsIfServerMenuExists():
-    Ingredeint
-    return "서버 메뉴에 해당하는 랜덤 레시피의 재료"
+    menuName = session['menuName']
+    recipe = getRandomRecipeByMenu(menuName)
+    session['recipeName'] = recipe.name
+    ingredients = " ".join(str(x) for x in recipe['ingredients'])
+    res = {
+        "version": "1.0",
+        "resultCode": "OK",
+        "output": {
+            "ingredientsWhenAnswerIngredients" : ingredients
+        }
+    }
+    return jsonify(res)
 #3.1.2. 서버에 레시피까지 있을 때
 @app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
 def answerIngredientsIfServerRecipeExists():
