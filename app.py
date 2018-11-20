@@ -294,7 +294,7 @@ def movePreviousStepIfServerStepExists():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "stepWhenMovePreviousStep": step
+                "stepWhenPreviousStep": step
             }
         }
     return jsonify(res)
@@ -323,7 +323,7 @@ def moveNextStepIfServerStepExists():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "stepWhenMoveNextStep": step
+                "stepWhenNextStep": step
             }
         }
     return jsonify(res)
@@ -351,7 +351,7 @@ def moveStepByStepNoIfServerStepExists():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "stepWhenMoveStepByStepNo": step
+                "stepWhenStepByStepNo": step
             }
         }
     return jsonify(res)
