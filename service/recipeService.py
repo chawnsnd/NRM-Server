@@ -129,8 +129,9 @@ def nextStep(recipeName,stepNo):
     stepNo+=1
     if stepNo >=recipeSize:
         return recipeStep[recipeSize-1] , recipeSize-1
-    step = recipeStep[stepNo]
-    return step , stepNo
+    else:
+        step = recipeStep[stepNo]
+        return step , stepNo
 
 def previousStep(recipeName,stepNo):
     recipe = query_recipe_with_recipe(recipeName)
@@ -138,13 +139,15 @@ def previousStep(recipeName,stepNo):
     stepNo-=1
     if stepNo < 0:
         return recipeStep[0] , 0
-    step = recipeStep[stepNo]
-    return step , stepNo
+    else:
+        step = recipeStep[stepNo]
+        return step , stepNo
 
 def numberStep(recipeName,stepNo):
     recipe = query_recipe_with_recipe(recipeName)
     recipeStep = recipe['steps']
     if stepNo <0 or stepNo >= len(recipe):
         return False , 0
-    step = recipeStep[stepNo]
-    return step , stepNo
+    else:
+        step = recipeStep[stepNo]
+        return step , stepNo
