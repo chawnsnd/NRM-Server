@@ -125,18 +125,20 @@ def getRecipeByRecipe(recipeName):
 def nextStep(recipeName,stepNo):
     recipe = query_recipe_with_recipe(recipeName)
     recipeSize = len(recipe)
+    recipeStep = recipe['steps']
     stepNo+=1
     if stepNo >=recipeSize:
-        return False , 0
+        return recipeStep[recipeSize-1] , recipeSize-1
     step = recipe[stepNo]
     return step , stepNo
 
 def previousStep(recipeName,stepNo):
     recipe = query_recipe_with_recipe(recipeName)
+    recipeStep = recipe['steps']
     stepNo-=1
     if stepNo < 0:
-        return False , 0
-    step = recipe[stepNo]
+        return recipeStep[0] , 0
+    step = recipeStep[stepNo]
     return step , stepNo
 
 def numberStep(recipeName,stepNo):
