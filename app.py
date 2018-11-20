@@ -340,8 +340,8 @@ def moveStepByStepNo():
         }
     return jsonify(res)
 #6.1. 서버에 레시피가 있는 경우
-@app.route("/moveStepByStepNoIfServerStepExists", methods=["POST"])
-def moveStepByStepNoIfServerStepExists():
+@app.route("/moveStepByStepNoIfServerRecipeExists", methods=["POST"])
+def moveStepByStepNoIfServerRecipeExists():
     recipeName = session['recipeName']
     oldStepNo = session['stepNo']
     step, newStepNo = numberStep(recipeName, oldStepNo)
