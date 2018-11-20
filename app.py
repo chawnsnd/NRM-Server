@@ -174,13 +174,13 @@ def answerRecipeIfServerMenuNone():
 #3.1. 키워드가 없을 때
 @app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
 def answerIngredient():
-    if 'recipe' in session:
+    if 'recipeName' in session:
         res = {
             "version": "1.0",
             "resultCode": "OK",
             "output": {"sessionState": "recipeExists"}
         }
-    elif 'menu' in session:
+    elif 'menuName' in session:
         res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -199,7 +199,7 @@ def answerIngredient():
 def answerIngredientsIfServerMenuExists():
     menuName = session['menuName']
     recipe = getRandomRecipeByMenu(menuName)
-    session['recipeName'] = recipe.name
+    session['recipeName'] = recipe['name']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
