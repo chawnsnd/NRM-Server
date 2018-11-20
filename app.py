@@ -200,12 +200,14 @@ def answerIngredientsIfServerMenuExists():
     menuName = session['menuName']
     recipe = getRandomRecipeByMenu(menuName)
     session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "ingredientsWhenAnswerIngredients" : ingredients
+            "ingredientsIfServerMenuExists" : ingredients
         }
     }
     return jsonify(res)
@@ -214,12 +216,15 @@ def answerIngredientsIfServerMenuExists():
 def answerIngredientsIfServerRecipeExists():
     recipeName = session['recipeName']
     recipe = getRecipeByRecipe(recipeName)
+    session['recipeName'] = recipe['name']
+    session['chefName'] = recipe['chef']
+    session['menuName'] = recipe['menu']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "ingredientsWhenAnswerIngredients" : ingredients
+            "ingredientsIfServerRecipeExists" : ingredients
         }
     }
     return jsonify(res)
