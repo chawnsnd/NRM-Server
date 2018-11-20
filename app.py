@@ -174,28 +174,30 @@ def answerRecipeIfServerMenuNone():
 #3.1. 키워드가 없을 때
 @app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
 def answerIngredient():
-    res = {
-        "version": "1.0",
-        "resultCode": "OK",
-        "output": {}
-    }
     if 'recipe' in session:
-        res['output'] : {
-            "sessionState": "recipeExists"
+        res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {"sessionState": "recipeExists"}
         }
     elif 'menu' in session:
-        res['output'] : {
-            "sessionState": "menuExists"
+        res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {"sessionState": "menuExists"}
         }
     else:
-        res['output'] : {
-            "sessionState": "none"
+        res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {"sessionState": "none"}
         }
     return jsonify(res)
     # return "서버 세션에 재료나 레시피가 있는지?"
 #3.1.1. 서버에 메뉴까지 있을 때
 @app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
 def answerIngredientsIfServerMenuExists():
+    Ingredeint
     return "서버 메뉴에 해당하는 랜덤 레시피의 재료"
 #3.1.2. 서버에 레시피까지 있을 때
 @app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
@@ -259,38 +261,3 @@ if __name__ == '__main__':
     app.debug = True
     app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
     # app.run(port=5000)
-
-# #셰프명으로 레시피 랜덤추천
-# @app.route("/recommendRecipeByChef", methods=["POST"])
-# def recommendRecipeByChef():
-#     req = request.json
-#     chef = req['action']['parameters']['chef']['value']
-#     result = {
-#         "recipeId": tmpRecipe["id"],
-#         "name": tmpRecipe["name"]
-#         }
-#     return jsonify(result)
-
-# #레시피에서스텝찾기
-# @app.route("/answerStepFromRecipeByStepNo", methods=["POST"])
-# def answerStepFromRecipeByStepNo():
-#     req = request.json
-#     # step = req['action']['parameters']['step']['value']
-#     step = 3
-#     result = {
-#         "recipeId": tmpRecipe["id"],
-#         "step": tmpRecipe["steps"][step],
-#         "stepNo": step
-#         }
-#     return jsonify(result)
-
-# #레시피에서재료찾기
-# @app.route("/answerFromIngredientsFromRecipe", methods=["POST"])
-# def answerFromIngredientsFromRecipe():
-#     req = request.json
-#     # recipe = req['action']['parameters']['recipe']['value']
-#     result = {
-#         "recipeId": tmpRecipe["id"],
-#         "ingredients": tmpRecipe["ingredients"]
-#         }
-#     return jsonify(result)
