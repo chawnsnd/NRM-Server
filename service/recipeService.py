@@ -127,7 +127,7 @@ def nextStep(recipeName,stepNo):
     recipeSize = len(recipe)
     recipeStep = recipe['steps']
     stepNo+=1
-    if stepNo >=recipeSize:
+    if stepNo >=recipeSize-1:
         return recipeStep[recipeSize-1] , recipeSize-1
     else:
         step = recipeStep[stepNo]
