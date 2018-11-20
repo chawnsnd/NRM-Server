@@ -12,6 +12,20 @@ def checkMenuExist():
         menuExist = "false"
     return menuExist
 
+def checkRecipeExist():
+    if 'RecipeName' in session:
+        RecipeExist = "true"
+    else:
+        RecipeExist = "false"
+    return RecipeExist
+
+def checkStepExist():
+    if 'step' in session:
+        stepExist = "true"
+    else:
+        stepExist = "false"
+    return stepExist
+
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
 def health():
@@ -43,6 +57,7 @@ def answerRecipeByMenu():
     session['chefName'] = recipe['chef']
     session['menuName'] = menuName
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -52,7 +67,6 @@ def answerRecipeByMenu():
         }
     }
     return jsonify(res)
-
 #2.1.2. 셰프키워드
 @app.route("/answerRecipeByChef", methods=["POST"])
 def answerRecipeByChef():
@@ -75,6 +89,7 @@ def answerRecipeByChefIfServerMenuExist():
     session['chefName'] = recipe['chef']
     session['menuName'] = recipe['menu']
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -94,6 +109,7 @@ def answerRecipeByChefIfServerMenuNone():
     session['chefName'] = recipe['chef']
     session['menuName'] = recipe['menu']
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -114,6 +130,7 @@ def answerRecipeByMenuAndChef():
     session['chefName'] = recipe['chef']
     session['menuName'] = recipe['menu']
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -143,6 +160,7 @@ def answerRecipeIfServerMenuExists():
     session['chefName'] = recipe['chef']
     session['menuName'] = recipe['menu']
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -160,6 +178,7 @@ def answerRecipeIfServerMenuNone():
     session['chefName'] = recipe['chef']
     session['menuName'] = recipe['menu']
     session['step'] = recipe['steps'][0]
+    session['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -252,45 +271,90 @@ def answerIngredientsByMenu():
     }
     return jsonify(res)
 
+#4. 스텝이동(이전)
+@app.route("/movePreviousStep", methods=["POST"])
+def movePreviousStep():
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "booleanStepExistWhenMovePreviousStep": checkStepExist()
+            }
+        }
+    return jsonify(res)
+#4.1. 서버에 스텝이 있을 경우
+@app.route("/movePreviousStepIfServerStepExists", methods=["POST"])
+def movePreviousStepIfServerStepExists():
+    recipeName = session['recipeName']
+    oldStepNo = session['stepNo']
+    step, newStepNo = previousStep(recipeName, oldStepNo)
+    session['step'] = step
+    session['stepNo'] = newStepNo
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "stepWhenMovePreviousStep": step
+            }
+        }
+    return jsonify(res)
 
-# #4. 스텝이동
-# @app.route("/answerNextStep", methods=["POST"])
-# def answerNextStep():
-#     req = request.json
-#     if 'recipe' not in session:
-#         res = {
-#             "version": "1.0",
-#             "resultCode": "BAD"
-#         }
-#     else:
-#         recipe = session['recipe']
-#         if 'state' not in req['action']['parameters'] and 'stepNo' in req['action']['parameters']:
-#             stepNo = req['action']['parameters']['stepNo']['value']
-#             session['stepNo'] = stepNo
-#             recipeStep = recipe.step[stepNo]
-#             res = {
-#                 "version": "1.0",
-#                 "resultCode": "OK",
-#                 "output": {
-#                     "recipeStep": recipeStep,
-#                     "stepNo": stepNo 
-#                 }
-#             }
-#         elif 'state' in req['action']['parameters'] and 'stepNo' not in req['action']['parameters']:
-#                 state = req['action']['parameters']['state']['value']
-#                 curStepNo = session['stepNo']+state
-#                 recipeStep = recipe.step[curStepNo]
-#                 session['stepNo'] = curStepNo
-#                 res = {
-#                     "version": "1.0",
-#                     "resultCode": "OK",
-#                     "output": {
-#                         "recipeStep": recipeStep,
-#                         "stepNo": stepNo,
-#                         "state": state 
-#                     }
-#                 }
-#     return jsonify(res)
+
+#5. 스텝이동(다음)
+@app.route("/moveNextStep", methods=["POST"])
+def moveNextStep():
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "booleanStepExistWhenMoveNextStep": checkStepExist()
+            }
+        }
+    return jsonify(res)
+#5.1. 서버에 스텝이 있을 경우
+@app.route("/moveNextStepIfServerStepExists", methods=["POST"])
+def moveNextStepIfServerStepExists():
+    recipeName = session['recipeName']
+    oldStepNo = session['stepNo']
+    step, newStepNo = nextStep(recipeName, oldStepNo)
+    session['step'] = step
+    session['stepNo'] = newStepNo
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "stepWhenMoveNextStep": step
+            }
+        }
+    return jsonify(res)
+
+#6. 스텝이동(숫자지정)
+@app.route("/moveStepByStepNo", methods=["POST"])
+def moveStepByStepNo():
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "booleanRecipeExistWhenMoveStepByStepNo": checkRecipeExist()
+            }
+        }
+    return jsonify(res)
+#6.1. 서버에 레시피가 있는 경우
+@app.route("/moveStepByStepNoIfServerStepExists", methods=["POST"])
+def moveStepByStepNoIfServerStepExists():
+    recipeName = session['recipeName']
+    oldStepNo = session['stepNo']
+    step, newStepNo = numberStep(recipeName, oldStepNo)
+    session['step'] = step
+    session['stepNo'] = newStepNo
+    res = {
+            "version": "1.0",
+            "resultCode": "OK",
+            "output": {
+                "stepWhenMoveStepByStepNo": step
+            }
+        }
+    return jsonify(res)
 
 #5. 좋아요 싫어요는 서버에서 할게 아니지?
 

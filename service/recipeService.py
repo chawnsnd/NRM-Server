@@ -121,3 +121,27 @@ def getRecipeByRecipe(recipeName):
     if recipe is None:
         return False
     return recipe
+
+def nextStep(recipeName,stepNo):
+    recipe = query_recipe_with_recipe(recipeName)
+    recipeSize = len(recipe)
+    stepNo+=1
+    if stepNo >=recipeSize:
+        return False , 0
+    step = recipe[stepNo]
+    return step , stepNo
+
+def previousStep(recipeName,stepNo):
+    recipe = query_recipe_with_recipe(recipeName)
+    stepNo-=1
+    if stepNo < 0:
+        return False , 0
+    step = recipe[stepNo]
+    return step , stepNo
+
+def numberStep(recipeName,stepNo):
+    recipe = query_recipe_with_recipe(recipeName)
+    if stepNo <0 or stepNo >= len(recipe):
+        return False , 0
+    step = recipe[stepNo]
+    return step , stepNo
