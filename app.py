@@ -13,11 +13,11 @@ def checkMenuExist():
     return menuExist
 
 def checkRecipeExist():
-    if 'RecipeName' in session:
-        RecipeExist = "true"
+    if 'recipeName' in session:
+        recipeExist = "true"
     else:
-        RecipeExist = "false"
-    return RecipeExist
+        recipeExist = "false"
+    return recipeExist
 
 def checkStepExist():
     if 'step' in session:
