@@ -343,7 +343,7 @@ def moveStepByStepNo():
 @app.route("/moveStepByStepNoIfServerRecipeExists", methods=["POST"])
 def moveStepByStepNoIfServerRecipeExists():
     req = request.json
-    reqStepNo = req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value'] - 1
+    reqStepNo = int(req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value']) - 1
     recipeName = session['recipeName']
     step, newStepNo = numberStep(recipeName, reqStepNo)
     session['step'] = step
