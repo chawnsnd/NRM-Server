@@ -230,13 +230,13 @@ def answerRecipeIfServerMenuNone():
 @app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
 def answerIngredient():
     sessionId = request.json['context']['session']['id']
-    if 'recipeName' in session:
+    if 'recipeName' in session[sessionId]:
         res = {
             "version": "1.0",
             "resultCode": "OK",
             "output": {"sessionState": "recipeExists"}
         }
-    elif 'menuName' in session:
+    elif 'menuName' in session[sessionId]:
         res = {
             "version": "1.0",
             "resultCode": "OK",
