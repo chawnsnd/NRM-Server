@@ -39,7 +39,6 @@ def before_first_request():
 def before_request():
     isNew = request.json['context']['session']['isNew']
     id = request.json['context']['session']['id']
-    print(id)
     if isNew is True:
         session[id] = {}
 
@@ -55,6 +54,7 @@ def health():
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
+    print(id)
     recipe = recommendRecipe()
     session[id]['menuName'] = recipe['menu']
     res = {
