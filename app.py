@@ -31,14 +31,15 @@ def checkStepExist():
 
 @app.before_first_request
 def before_first_request():
-    id = str(request.json['context']['session']['id'])
+    id = request.json['context']['session']['id']
     session[id] = {}
 
 #세션유지되는지?
 @app.before_request
 def before_request():
     isNew = request.json['context']['session']['isNew']
-    id = str(request.json['context']['session']['id'])
+    id = request.json['context']['session']['id']
+    print(id)
     if isNew is True:
         session[id] = {}
 
