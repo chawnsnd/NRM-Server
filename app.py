@@ -5,6 +5,8 @@ import os
 
 app = Flask(__name__)
 
+# session = {}
+
 def checkMenuExist():
     if 'menuName' in session:
         menuExist = "true"
@@ -30,7 +32,9 @@ def checkStepExist():
 @app.before_request
 def before_request():
     isNew = request.json['context']['session']['isNew']
-    print(session['menuName'])
+    if isNew is True:
+        session['id'] = request.json['context']['session']['id']
+    print(session['id'])
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
