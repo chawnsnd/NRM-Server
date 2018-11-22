@@ -9,21 +9,24 @@ session = {}
 sessionId = ""
 
 def checkMenuExist():
-    if 'menuName' in session:
+    sessionId = request.json['context']['session']['id']
+    if 'menuName' in session[sessionId]:
         menuExist = "true"
     else:
         menuExist = "false"
     return menuExist
 
 def checkRecipeExist():
-    if 'recipeName' in session:
+    sessionId = request.json['context']['session']['id']
+    if 'recipeName' in session[sessionId]:
         recipeExist = "true"
     else:
         recipeExist = "false"
     return recipeExist
 
 def checkStepExist():
-    if 'step' in session:
+    sessionId = request.json['context']['session']['id']
+    if 'step' in session[sessionId]:
         stepExist = "true"
     else:
         stepExist = "false"
