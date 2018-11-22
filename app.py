@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 session = {}
-global sessionId = ""
+sessionId = ""
 
 def checkMenuExist():
     if 'menuName' in session:
@@ -29,36 +29,23 @@ def checkStepExist():
         stepExist = "false"
     return stepExist
 
-@app.before_first_request
-def before_first_request():
-    print(request.json['context']['session']['id'])
-    sessionId = request.json['context']['session']['id']
-    print(sessionId)
-    session[sessionId] = {}
-
 #세션유지되는지?
 @app.before_request
 def before_request():
-    print(request.json['context']['session']['id'])
     isNew = request.json['context']['session']['isNew']
-    sessionId = request.json['context']['session']['id']
-    print(sessionId)
     if isNew is True:
         session[sessionId] = {}
-
-@app.after_request
-def after_request():
-    print(session)
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
 def health():
+    sessionId = request.json['context']['session']['id']
     return Response("OK", status=200)
 
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
-    print(sessionId)
+    sessionId = request.json['context']['session']['id']
     recipe = recommendRecipe()
     session[sessionId]['menuName'] = recipe['menu']
     res = {
@@ -75,6 +62,7 @@ def answerMenuRecommendation():
 #2.1.1. 메뉴 키워드
 @app.route("/answerRecipeByMenu", methods=["POST"])
 def answerRecipeByMenu():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
@@ -96,6 +84,7 @@ def answerRecipeByMenu():
 #2.1.2. 셰프키워드
 @app.route("/answerRecipeByChef", methods=["POST"])
 def answerRecipeByChef():
+    sessionId = request.json['context']['session']['id']
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -107,6 +96,7 @@ def answerRecipeByChef():
 #2.1.2.1. 서버에 메뉴 있을 때
 @app.route("/answerRecipeByChefIfServerMenuExist", methods=["POST"])
 def answerRecipeByChefIfServerMenuExist():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     menuName = session[sessionId]['menuName']
@@ -129,6 +119,7 @@ def answerRecipeByChefIfServerMenuExist():
 #2.1.2.2. 서버에 메뉴 없을 때
 @app.route("/answerRecipeByChefIfServerMenuNone", methods=["POST"])
 def answerRecipeByChefIfServerMenuNone():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     recipe = getRandomRecipeByChef(chefName)
@@ -150,6 +141,7 @@ def answerRecipeByChefIfServerMenuNone():
 #2.1.3. 메뉴&셰프키워드
 @app.route("/answerRecipeByMenuAndChef", methods=["POST"])
 def answerRecipeByMenuAndChef():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
@@ -172,6 +164,7 @@ def answerRecipeByMenuAndChef():
 #2.1. 키워드 없을 때
 @app.route("/answerRecipeWithoutKeyWord", methods=["POST"])
 def answerRecipeWithoutKeyWord():
+    sessionId = request.json['context']['session']['id']
     res = {
         "version": "1.0",
         "resultCode": "OK",
@@ -183,6 +176,7 @@ def answerRecipeWithoutKeyWord():
 #2.1.1. 서버에 메뉴 있을 때
 @app.route("/answerRecipeIfServerMenuExists", methods=["POST"])
 def answerRecipeIfServerMenuExists():
+    sessionId = request.json['context']['session']['id']
     menuName = session[sessionId]['menuName']
     recipe = getRandomRecipeByMenu(menuName)
     session[sessionId]['recipeName'] = recipe['name']
@@ -203,6 +197,7 @@ def answerRecipeIfServerMenuExists():
 #2.1.2. 서버에 메뉴 없을 때
 @app.route("/answerRecipeIfServerMenuNone", methods=["POST"])
 def answerRecipeIfServerMenuNone():
+    sessionId = request.json['context']['session']['id']
     recipe = recommendRecipe()
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
@@ -224,6 +219,7 @@ def answerRecipeIfServerMenuNone():
 #3.1. 키워드가 없을 때
 @app.route("/answerIngredientsWithoutKeyWord", methods=["POST"])
 def answerIngredient():
+    sessionId = request.json['context']['session']['id']
     if 'recipeName' in session:
         res = {
             "version": "1.0",
@@ -247,6 +243,7 @@ def answerIngredient():
 #3.1.1. 서버에 메뉴까지 있을 때
 @app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
 def answerIngredientsIfServerMenuExists():
+    sessionId = request.json['context']['session']['id']
     menuName = session[sessionId]['menuName']
     recipe = getRandomRecipeByMenu(menuName)
     session[sessionId]['recipeName'] = recipe['name']
@@ -264,6 +261,7 @@ def answerIngredientsIfServerMenuExists():
 #3.1.2. 서버에 레시피까지 있을 때
 @app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
 def answerIngredientsIfServerRecipeExists():
+    sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
     recipe = getRecipeByRecipe(recipeName)
     session[sessionId]['recipeName'] = recipe['name']
@@ -282,10 +280,12 @@ def answerIngredientsIfServerRecipeExists():
 #3.2.1. 키워드가 레시피일 때
 @app.route("/answerIngredientsByRecipe", methods=["POST"])
 def answerIngredientsByRecipe():
+    sessionId = request.json['context']['session']['id']
     return "키워드로 받은 레시피의 재료//준비중인 기능??"
 #3.2.2. 키워드가 메뉴일 때
 @app.route("/answerIngredientsByMenu", methods=["POST"])
 def answerIngredientsByMenu():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerIngredient']['value']
     recipe = getRandomRecipeByMenu(menuName)
@@ -305,6 +305,7 @@ def answerIngredientsByMenu():
 #4. 스텝이동(이전)
 @app.route("/movePreviousStep", methods=["POST"])
 def movePreviousStep():
+    sessionId = request.json['context']['session']['id']
     res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -316,6 +317,7 @@ def movePreviousStep():
 #4.1. 서버에 스텝이 있을 경우
 @app.route("/movePreviousStepIfServerStepExists", methods=["POST"])
 def movePreviousStepIfServerStepExists():
+    sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
     oldStepNo = session[sessionId]['stepNo']
     step, newStepNo = previousStep(recipeName, oldStepNo)
@@ -334,6 +336,7 @@ def movePreviousStepIfServerStepExists():
 #5. 스텝이동(다음)
 @app.route("/moveNextStep", methods=["POST"])
 def moveNextStep():
+    sessionId = request.json['context']['session']['id']
     res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -345,6 +348,7 @@ def moveNextStep():
 #5.1. 서버에 스텝이 있을 경우
 @app.route("/moveNextStepIfServerStepExists", methods=["POST"])
 def moveNextStepIfServerStepExists():
+    sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
     oldStepNo = session[sessionId]['stepNo']
     step, newStepNo = nextStep(recipeName, oldStepNo)
@@ -362,6 +366,7 @@ def moveNextStepIfServerStepExists():
 #6. 스텝이동(숫자지정)
 @app.route("/moveStepByStepNo", methods=["POST"])
 def moveStepByStepNo():
+    sessionId = request.json['context']['session']['id']
     res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -373,6 +378,7 @@ def moveStepByStepNo():
 #6.1. 서버에 레시피가 있는 경우
 @app.route("/moveStepByStepNoIfServerRecipeExists", methods=["POST"])
 def moveStepByStepNoIfServerRecipeExists():
+    sessionId = request.json['context']['session']['id']
     req = request.json
     reqStepNo = int(req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value']) - 1
     recipeName = session[sessionId]['recipeName']
