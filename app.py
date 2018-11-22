@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, session
 from service.recipeService import *
 from dao.recipeDao import *
+import os
 
 app = Flask(__name__)
-session ={}
+# session ={}
 
 def checkMenuExist():
     if 'menuName' in session:
@@ -360,7 +361,7 @@ def moveStepByStepNoIfServerRecipeExists():
 #5. 좋아요 싫어요는 서버에서 할게 아니지?
 
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
+    app.secret_key = str(os.urandom(16))
     app.config['SESSION_TYPE'] = 'filesystem'
     app.debug = True
     app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
