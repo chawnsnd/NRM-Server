@@ -46,6 +46,7 @@ def health():
 def answerMenuRecommendation():
     recipe = recommendRecipe()
     session['menuName'] = recipe['menu']
+    print(session['menuName'])
     res = {
         "version": "1.0",
         "resultCode": "OK",
