@@ -40,6 +40,9 @@ def before_request():
     global id = request.json['context']['session']['id']
     if isNew is True:
         session[id] = {}
+
+@app.after_request
+def after_request():
     print(session)
 
 #0. 심사를 위한 health
@@ -79,7 +82,8 @@ def answerRecipeByMenu():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
@@ -111,7 +115,8 @@ def answerRecipeByChefIfServerMenuExist():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
@@ -131,7 +136,8 @@ def answerRecipeByChefIfServerMenuNone():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
@@ -152,7 +158,8 @@ def answerRecipeByMenuAndChef():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
@@ -182,7 +189,8 @@ def answerRecipeIfServerMenuExists():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
@@ -200,7 +208,8 @@ def answerRecipeIfServerMenuNone():
         "resultCode": "OK",
         "output": {
             "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step']
+            "stepWhenAnswerRecipe": session[id]['step'],
+            "stepNoWhenAnswerRecipe": session[id]['stepNo']
         }
     }
     return jsonify(res)
