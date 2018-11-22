@@ -29,10 +29,16 @@ def checkStepExist():
         stepExist = "false"
     return stepExist
 
+@app.before_first_request
+def before_first_request():
+    sessionId = request.json['context']['session']['id']
+    session[sessionId] = {}
+
 #세션유지되는지?
 @app.before_request
 def before_request():
     isNew = request.json['context']['session']['isNew']
+    sessionId = request.json['context']['session']['id']
     if isNew is True:
         session[sessionId] = {}
 
