@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 session = {}
-id
+global id
 
 def checkMenuExist():
     if 'menuName' in session:
