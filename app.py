@@ -399,7 +399,7 @@ def moveStepByStepNoIfServerRecipeExists():
             "version": "1.0",
             "resultCode": "OK",
             "output": {
-                "stepWhenStepByStepNo": step
+                "stepNoWhenStepByStepNo": step
             }
         }
     return jsonify(res)
