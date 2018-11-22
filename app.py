@@ -27,6 +27,11 @@ def checkStepExist():
         stepExist = "false"
     return stepExist
 
+#세션유지되는지?
+@app.before_request
+def before_request():
+    print(session['isNew'])
+
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
 def health():
