@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response, session, context
+from flask import Flask, request, jsonify, Response, session
 from service.recipeService import *
 from dao.recipeDao import *
 import os
@@ -28,12 +28,9 @@ def checkStepExist():
 
 #세션유지되는지?
 @app.before_request
-def before_request(context):
+def before_request():
     isNew = request.json['context']['session']['isNew']
-    # if isNew is False:
-    #     session = {}
-    # print(isNew)
-    print(context)
+    print(session['menuName'])
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
