@@ -56,7 +56,10 @@ def health():
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
     sessionId = request.json['context']['session']['id']
-    recipe = recommendRecipe()
+    try:
+        recipe = recommendRecipe()
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['menuName'] = recipe['menu']
     res = {
         "version": "1.0",
@@ -75,7 +78,10 @@ def answerRecipeByMenu():
     sessionId = request.json['context']['session']['id']
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-    recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    try:
+        recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = menuName
@@ -110,7 +116,10 @@ def answerRecipeByChefIfServerMenuExist():
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     menuName = session[sessionId]['menuName']
-    recipe = getRecipeByMenuAndChef(menuName, chefName)
+    try:
+        recipe = getRecipeByMenuAndChef(menuName, chefName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -132,7 +141,10 @@ def answerRecipeByChefIfServerMenuNone():
     sessionId = request.json['context']['session']['id']
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
-    recipe = getRandomRecipeByChef(chefName)
+    try:
+        recipe = getRandomRecipeByChef(chefName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -155,7 +167,10 @@ def answerRecipeByMenuAndChef():
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
-    recipe = getRecipeByMenuAndChef(menuName, chefName)
+    try:
+        recipe = getRecipeByMenuAndChef(menuName, chefName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -187,7 +202,10 @@ def answerRecipeWithoutKeyWord():
 @app.route("/answerRecipeIfServerMenuExists", methods=["POST"])
 def answerRecipeIfServerMenuExists():
     sessionId = request.json['context']['session']['id']
-    menuName = session[sessionId]['menuName']
+    try:
+        menuName = session[sessionId]['menuName']
+    except:
+        return Response("NONE", status=404)
     recipe = getRandomRecipeByMenu(menuName)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
@@ -208,7 +226,10 @@ def answerRecipeIfServerMenuExists():
 @app.route("/answerRecipeIfServerMenuNone", methods=["POST"])
 def answerRecipeIfServerMenuNone():
     sessionId = request.json['context']['session']['id']
-    recipe = recommendRecipe()
+    try:
+        recipe = recommendRecipe()
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -255,7 +276,10 @@ def answerIngredient():
 def answerIngredientsIfServerMenuExists():
     sessionId = request.json['context']['session']['id']
     menuName = session[sessionId]['menuName']
-    recipe = getRandomRecipeByMenu(menuName)
+    try:
+        recipe = getRandomRecipeByMenu(menuName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -273,7 +297,10 @@ def answerIngredientsIfServerMenuExists():
 def answerIngredientsIfServerRecipeExists():
     sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
-    recipe = getRecipeByRecipe(recipeName)
+    try:
+        recipe = getRecipeByRecipe(recipeName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -298,7 +325,10 @@ def answerIngredientsByMenu():
     sessionId = request.json['context']['session']['id']
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerIngredient']['value']
-    recipe = getRandomRecipeByMenu(menuName)
+    try:
+        recipe = getRandomRecipeByMenu(menuName)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -330,7 +360,10 @@ def movePreviousStepIfServerStepExists():
     sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
     oldStepNo = session[sessionId]['stepNo']
-    step, newStepNo = previousStep(recipeName, oldStepNo)
+    try:
+        step, newStepNo = previousStep(recipeName, oldStepNo)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
@@ -362,7 +395,10 @@ def moveNextStepIfServerStepExists():
     sessionId = request.json['context']['session']['id']
     recipeName = session[sessionId]['recipeName']
     oldStepNo = session[sessionId]['stepNo']
-    step, newStepNo = nextStep(recipeName, oldStepNo)
+    try:
+        step, newStepNo = nextStep(recipeName, oldStepNo)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
@@ -394,7 +430,10 @@ def moveStepByStepNoIfServerRecipeExists():
     req = request.json
     reqStepNo = int(req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value']) - 1
     recipeName = session[sessionId]['recipeName']
-    step, newStepNo = numberStep(recipeName, reqStepNo)
+    try:
+        step, newStepNo = numberStep(recipeName, reqStepNo)
+    except:
+        return Response("NONE", status=404)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
