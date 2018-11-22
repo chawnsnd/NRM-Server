@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 session = {}
-global id
+session_id
 
 def checkMenuExist():
     if 'menuName' in session:
@@ -31,16 +31,16 @@ def checkStepExist():
 
 @app.before_first_request
 def before_first_request():
-    id = request.json['context']['session']['id']
-    session[id] = {}
+    session_id = request.json['context']['session']['id']
+    session[session_id] = {}
 
 #세션유지되는지?
 @app.before_request
 def before_request():
     isNew = request.json['context']['session']['isNew']
-    id = request.json['context']['session']['id']
+    session_id = request.json['context']['session']['id']
     if isNew is True:
-        session[id] = {}
+        session[session_id] = {}
 
 @app.after_request
 def after_request():
@@ -54,14 +54,14 @@ def health():
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
-    print(id)
+    print(session_id)
     recipe = recommendRecipe()
-    session[id]['menuName'] = recipe['menu']
+    session[session_id]['menuName'] = recipe['menu']
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "menuNameWhenAnswerMenu":session[id]['menuName']
+            "menuNameWhenAnswerMenu":session[session_id]['menuName']
         }
     }
     return jsonify(res)
@@ -74,18 +74,18 @@ def answerRecipeByMenu():
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
     recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = menuName
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = menuName
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -105,20 +105,20 @@ def answerRecipeByChef():
 def answerRecipeByChefIfServerMenuExist():
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
-    menuName = session[id]['menuName']
+    menuName = session[session_id]['menuName']
     recipe = getRecipeByMenuAndChef(menuName, chefName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -128,18 +128,18 @@ def answerRecipeByChefIfServerMenuNone():
     req = request.json
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     recipe = getRandomRecipeByChef(chefName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -150,18 +150,18 @@ def answerRecipeByMenuAndChef():
     chefName = req['action']['parameters']['chefNameWhenAnswerRecipe']['value']
     menuName = req['action']['parameters']['menuNameWhenAnswerRecipe']['value']
     recipe = getRecipeByMenuAndChef(menuName, chefName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -179,20 +179,20 @@ def answerRecipeWithoutKeyWord():
 #2.1.1. 서버에 메뉴 있을 때
 @app.route("/answerRecipeIfServerMenuExists", methods=["POST"])
 def answerRecipeIfServerMenuExists():
-    menuName = session[id]['menuName']
+    menuName = session[session_id]['menuName']
     recipe = getRandomRecipeByMenu(menuName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -200,18 +200,18 @@ def answerRecipeIfServerMenuExists():
 @app.route("/answerRecipeIfServerMenuNone", methods=["POST"])
 def answerRecipeIfServerMenuNone():
     recipe = recommendRecipe()
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
-    session[id]['step'] = recipe['steps'][0]
-    session[id]['stepNo'] = 0
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
+    session[session_id]['step'] = recipe['steps'][0]
+    session[session_id]['stepNo'] = 0
     res = {
         "version": "1.0",
         "resultCode": "OK",
         "output": {
-            "recipeNameWhenAnswerRecipe": session[id]['recipeName'],
-            "stepWhenAnswerRecipe": session[id]['step'],
-            "stepNoWhenAnswerRecipe": session[id]['stepNo']
+            "recipeNameWhenAnswerRecipe": session[session_id]['recipeName'],
+            "stepWhenAnswerRecipe": session[session_id]['step'],
+            "stepNoWhenAnswerRecipe": session[session_id]['stepNo']
         }
     }
     return jsonify(res)
@@ -243,11 +243,11 @@ def answerIngredient():
 #3.1.1. 서버에 메뉴까지 있을 때
 @app.route("/answerIngredientsIfServerMenuExists", methods=["POST"])
 def answerIngredientsIfServerMenuExists():
-    menuName = session[id]['menuName']
+    menuName = session[session_id]['menuName']
     recipe = getRandomRecipeByMenu(menuName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
@@ -260,11 +260,11 @@ def answerIngredientsIfServerMenuExists():
 #3.1.2. 서버에 레시피까지 있을 때
 @app.route("/answerIngredientsIfServerRecipeExists", methods=["POST"])
 def answerIngredientsIfServerRecipeExists():
-    recipeName = session[id]['recipeName']
+    recipeName = session[session_id]['recipeName']
     recipe = getRecipeByRecipe(recipeName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
@@ -285,9 +285,9 @@ def answerIngredientsByMenu():
     req = request.json
     menuName = req['action']['parameters']['menuNameWhenAnswerIngredient']['value']
     recipe = getRandomRecipeByMenu(menuName)
-    session[id]['recipeName'] = recipe['name']
-    session[id]['chefName'] = recipe['chef']
-    session[id]['menuName'] = recipe['menu']
+    session[session_id]['recipeName'] = recipe['name']
+    session[session_id]['chefName'] = recipe['chef']
+    session[session_id]['menuName'] = recipe['menu']
     ingredients = " ".join(str(x) for x in recipe['ingredients'])
     res = {
         "version": "1.0",
@@ -312,11 +312,11 @@ def movePreviousStep():
 #4.1. 서버에 스텝이 있을 경우
 @app.route("/movePreviousStepIfServerStepExists", methods=["POST"])
 def movePreviousStepIfServerStepExists():
-    recipeName = session[id]['recipeName']
-    oldStepNo = session[id]['stepNo']
+    recipeName = session[session_id]['recipeName']
+    oldStepNo = session[session_id]['stepNo']
     step, newStepNo = previousStep(recipeName, oldStepNo)
-    session[id]['step'] = step
-    session[id]['stepNo'] = newStepNo
+    session[session_id]['step'] = step
+    session[session_id]['stepNo'] = newStepNo
     res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -341,11 +341,11 @@ def moveNextStep():
 #5.1. 서버에 스텝이 있을 경우
 @app.route("/moveNextStepIfServerStepExists", methods=["POST"])
 def moveNextStepIfServerStepExists():
-    recipeName = session[id]['recipeName']
-    oldStepNo = session[id]['stepNo']
+    recipeName = session[session_id]['recipeName']
+    oldStepNo = session[session_id]['stepNo']
     step, newStepNo = nextStep(recipeName, oldStepNo)
-    session[id]['step'] = step
-    session[id]['stepNo'] = newStepNo
+    session[session_id]['step'] = step
+    session[session_id]['stepNo'] = newStepNo
     res = {
             "version": "1.0",
             "resultCode": "OK",
@@ -371,10 +371,10 @@ def moveStepByStepNo():
 def moveStepByStepNoIfServerRecipeExists():
     req = request.json
     reqStepNo = int(req['action']['parameters']['stepNoWhenRequestStepByStepNo']['value']) - 1
-    recipeName = session[id]['recipeName']
+    recipeName = session[session_id]['recipeName']
     step, newStepNo = numberStep(recipeName, reqStepNo)
-    session[id]['step'] = step
-    session[id]['stepNo'] = newStepNo
+    session[session_id]['step'] = step
+    session[session_id]['stepNo'] = newStepNo
     res = {
             "version": "1.0",
             "resultCode": "OK",
