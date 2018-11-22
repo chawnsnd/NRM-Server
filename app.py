@@ -6,6 +6,7 @@ import os
 app = Flask(__name__)
 
 session = {}
+id
 
 def checkMenuExist():
     if 'menuName' in session:
@@ -30,7 +31,7 @@ def checkStepExist():
 
 @app.before_first_request
 def before_first_request():
-    global id = request.json['context']['session']['id']
+    id = request.json['context']['session']['id']
     session[id] = {}
 
 #세션유지되는지?
