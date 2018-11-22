@@ -42,7 +42,7 @@ def before_first_request():
 def before_request():
     isNew = request.json['context']['session']['isNew']
     sessionId = request.json['context']['session']['id']
-    print(sessionId)
+    print(session)
     if isNew is True:
         session[sessionId] = {}
 
