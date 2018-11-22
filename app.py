@@ -34,7 +34,6 @@ def before_request():
     isNew = request.json['context']['session']['isNew']
     if isNew is True:
         session['id'] = request.json['context']['session']['id']
-    print(session['id'])
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
