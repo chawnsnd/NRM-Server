@@ -38,7 +38,7 @@ def before_first_request():
 @app.before_request
 def before_request():
     isNew = request.json['context']['session']['isNew']
-    global id = request.json['context']['session']['id']
+    id = request.json['context']['session']['id']
     if isNew is True:
         session[id] = {}
 
