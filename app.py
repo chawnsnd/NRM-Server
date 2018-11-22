@@ -54,7 +54,7 @@ def health():
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
-    print(sessionId = "")
+    print(sessionId)
     recipe = recommendRecipe()
     session[sessionId]['menuName'] = recipe['menu']
     res = {
