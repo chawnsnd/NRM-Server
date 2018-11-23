@@ -127,11 +127,29 @@ def answerRecipeByChefIfServerMenuExist():
     try:
         recipe = getRecipeByMenuAndChef(menuName, chefName)
     except:
-        res = {
-            "version": "1.0",
-            "resultCode": "error_db_none",
-        }
-        return jsonify(res)
+        try:
+            recipe = getRecipeByChef(chefName)
+            session[sessionId]['recipeName'] = recipe['name']
+            session[sessionId]['chefName'] = recipe['chef']
+            session[sessionId]['menuName'] = recipe['menu']
+            session[sessionId]['step'] = recipe['steps'][0]
+            session[sessionId]['stepNo'] = 0
+            res = {
+                "version": "1.0",
+                "resultCode": "OK",
+                "output": {
+                    "recipeNameWhenAnswerRecipe": session[sessionId]['recipeName'],
+                    "stepWhenAnswerRecipe": session[sessionId]['step'],
+                    "stepNoWhenAnswerRecipe": session[sessionId]['stepNo']
+                }
+            }
+            return jsonify(res)
+        except:
+            res = {
+                "version": "1.0",
+                "resultCode": "error_db_none",
+            }
+            return jsonify(res)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
