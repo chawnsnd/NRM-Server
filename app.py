@@ -95,10 +95,7 @@ def allRecipe():
         "양지머리 100g,"
     ],
     "id" : 1.0
-}
-
-/* 2 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed84"),
     "ROW_NUM" : 2.0,
     "SUMRY" : "정월대보름에 먹던 오곡밥! 영양을 한그릇에 담았습니다.",
@@ -127,10 +124,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 2.0
-}
-
-/* 3 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed85"),
     "ROW_NUM" : 3.0,
     "SUMRY" : "잡채밥 한 그릇이면 오늘 저녁 끝! 입 맛 없을 때 먹으면 그만이지요~",
@@ -157,10 +151,7 @@ def allRecipe():
         "부추 30g,"
     ],
     "id" : 3.0
-}
-
-/* 4 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed86"),
     "ROW_NUM" : 4.0,
     "SUMRY" : "다이어트에 으뜸인 콩나물밥. 밥 물 넣을때 평소보다 적게 넣는거 잊지마세요!",
@@ -179,10 +170,7 @@ def allRecipe():
     ],
     "ingredients" : [],
     "id" : 4.0
-}
-
-/* 5 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed87"),
     "ROW_NUM" : 5.0,
     "SUMRY" : "집에서도 쉽게 만들어 맛있게 먹을 수 있답니다. 어려워 마시고 만들어 보세요~!",
@@ -213,10 +201,7 @@ def allRecipe():
         "물 4컵,"
     ],
     "id" : 5.0
-}
-
-/* 6 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed88"),
     "ROW_NUM" : 6.0,
     "SUMRY" : "호박죽 한 그릇이면 하루가 든든하답니다.",
@@ -244,10 +229,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 6.0
-}
-
-/* 7 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed89"),
     "ROW_NUM" : 7.0,
     "SUMRY" : "검은깨를 갈아서 만든 고소함이 가득한 흑임자죽. 남녀노소 모두 사랑하는 맛!",
@@ -274,10 +256,7 @@ def allRecipe():
         "설탕 약간,"
     ],
     "id" : 7.0
-}
-
-/* 8 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed8a"),
     "ROW_NUM" : 8.0,
     "SUMRY" : "향긋한 카레향이 너무 좋지요. 누구나 좋아하는 만들기도 간편한 음식입니다.",
@@ -308,10 +287,7 @@ def allRecipe():
         "통후추 약간,"
     ],
     "id" : 8.0
-}
-
-/* 9 */
-{
+},{
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed8b"),
     "ROW_NUM" : 9.0,
     "SUMRY" : "각종 채소를 계란 속에 꼭꼭 숨겨 편식하는 아이들도 맛있게 먹어요~",
@@ -347,9 +323,7 @@ def allRecipe():
         "다시마 1장,"
     ],
     "id" : 9.0
-}
-
-/* 10 */
+},
 {
     "_id" : ObjectId("5bf4dc37aa33c8cb75d5ed8c"),
     "ROW_NUM" : 10.0,
@@ -383,9 +357,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 10.0
-}
-
-/* 11 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed8d"),
     "ROW_NUM" : 11.0,
@@ -419,9 +391,7 @@ def allRecipe():
         "동치미무 1개,"
     ],
     "id" : 11.0
-}
-
-/* 12 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed8e"),
     "ROW_NUM" : 12.0,
@@ -455,9 +425,7 @@ def allRecipe():
         "통후추 약간,"
     ],
     "id" : 12.0
-}
-
-/* 13 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed8f"),
     "ROW_NUM" : 13.0,
@@ -493,9 +461,7 @@ def allRecipe():
         "물 1컵,"
     ],
     "id" : 13.0
-}
-
-/* 14 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed90"),
     "ROW_NUM" : 14.0,
@@ -527,9 +493,7 @@ def allRecipe():
         "깻잎 15장,"
     ],
     "id" : 14.0
-}
-
-/* 15 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed91"),
     "ROW_NUM" : 15.0,
@@ -566,9 +530,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 15.0
-}
-
-/* 16 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed92"),
     "ROW_NUM" : 16.0,
@@ -606,9 +568,7 @@ def allRecipe():
         "참기름 1큰술,"
     ],
     "id" : 16.0
-}
-
-/* 17 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed93"),
     "ROW_NUM" : 17.0,
@@ -639,9 +599,7 @@ def allRecipe():
         "물 5컵,"
     ],
     "id" : 17.0
-}
-
-/* 18 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed94"),
     "ROW_NUM" : 18.0,
@@ -671,9 +629,7 @@ def allRecipe():
         "후춧가루 조금,"
     ],
     "id" : 18.0
-}
-
-/* 19 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed95"),
     "ROW_NUM" : 19.0,
@@ -706,9 +662,7 @@ def allRecipe():
         "후춧가루 약간,"
     ],
     "id" : 19.0
-}
-
-/* 20 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed96"),
     "ROW_NUM" : 20.0,
@@ -739,9 +693,7 @@ def allRecipe():
         "물 5컵,"
     ],
     "id" : 20.0
-}
-
-/* 21 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed97"),
     "ROW_NUM" : 21.0,
@@ -770,9 +722,7 @@ def allRecipe():
         "물 10컵,"
     ],
     "id" : 21.0
-}
-
-/* 22 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed98"),
     "ROW_NUM" : 22.0,
@@ -804,9 +754,7 @@ def allRecipe():
         "물 10컵,"
     ],
     "id" : 22.0
-}
-
-/* 23 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed99"),
     "ROW_NUM" : 23.0,
@@ -837,9 +785,7 @@ def allRecipe():
         "후춧가루 약간,"
     ],
     "id" : 23.0
-}
-
-/* 24 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9a"),
     "ROW_NUM" : 24.0,
@@ -873,9 +819,7 @@ def allRecipe():
         "차이브 4개,"
     ],
     "id" : 24.0
-}
-
-/* 25 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9b"),
     "ROW_NUM" : 25.0,
@@ -909,9 +853,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 25.0
-}
-
-/* 26 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9c"),
     "ROW_NUM" : 26.0,
@@ -950,9 +892,7 @@ def allRecipe():
         "소스 ,"
     ],
     "id" : 26.0
-}
-
-/* 27 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9d"),
     "ROW_NUM" : 27.0,
@@ -976,9 +916,7 @@ def allRecipe():
         "소금 약간,"
     ],
     "id" : 27.0
-}
-
-/* 28 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9e"),
     "ROW_NUM" : 28.0,
@@ -1013,9 +951,7 @@ def allRecipe():
         "그린올리브 10g,"
     ],
     "id" : 28.0
-}
-
-/* 29 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5ed9f"),
     "ROW_NUM" : 29.0,
@@ -1053,9 +989,7 @@ def allRecipe():
         "생강즙 1큰술,"
     ],
     "id" : 29.0
-}
-
-/* 30 */
+},
 {
     "_id" : ObjectId("5bf4dc69aa33c8cb75d5eda0"),
     "ROW_NUM" : 30.0,
