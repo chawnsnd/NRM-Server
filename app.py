@@ -51,12 +51,12 @@ def before_first_request():
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
-def health():
+def healthGet():
     return Response("OK", status=200)
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["POST"])
-def health():
+def healthPost():
     return Response("OK", status=200)
 
 #1. 메뉴추천
