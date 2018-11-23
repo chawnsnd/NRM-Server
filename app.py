@@ -54,6 +54,11 @@ def before_first_request():
 def health():
     return Response("OK", status=200)
 
+#0. 심사를 위한 health
+@app.route("/health", methods=["POST"])
+def health():
+    return Response("OK", status=200)
+
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
 def answerMenuRecommendation():
@@ -584,5 +589,5 @@ def moveStepByStepNoIfServerRecipeExists():
 if __name__ == '__main__':
     app.secret_key = str(os.urandom(16))
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=80)
     # app.run(port=5000)
