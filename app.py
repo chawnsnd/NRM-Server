@@ -57,7 +57,7 @@ def health():
 #0. 심사를 위한 allRecipe
 @app.route("/allRecipe", methods=["GET"])
 def allRecipe():
-    return allRecipes()
+    return jsonify(allRecipes())
 
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
