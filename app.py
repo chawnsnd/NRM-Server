@@ -48,9 +48,20 @@ def before_request():
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
-def health():
+def healthget():
     sessionId = request.json['context']['session']['id']
     return Response("OK", status=200)
+
+#0. 심사를 위한 health
+@app.route("/health", methods=["POST"])
+def healthpost():
+    sessionId = request.json['context']['session']['id']
+    return Response("OK", status=200)
+
+#0. 심사를 위한 allRecipe
+@app.route("/allRecipe", methods=["GET"])
+def allRecipe():
+    return allRecipes()
 
 #1. 메뉴추천
 @app.route("/answerMenuRecommendation", methods=["POST"])
