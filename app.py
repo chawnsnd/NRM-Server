@@ -190,6 +190,7 @@ def answerRecipeByMenuAndChef():
             "version": "1.0",
             "resultCode": "error_db_none",
         }
+        print(res)
         return jsonify(res)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
