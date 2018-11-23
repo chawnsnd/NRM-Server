@@ -59,7 +59,7 @@ def answerMenuRecommendation():
     try:
         recipe = recommendRecipe()
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['menuName'] = recipe['menu']
     res = {
         "version": "1.0",
@@ -81,7 +81,7 @@ def answerRecipeByMenu():
     try:
         recipe = getRecipeByMenu(menuName) #이거 만들어야 됨
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = menuName
@@ -119,7 +119,7 @@ def answerRecipeByChefIfServerMenuExist():
     try:
         recipe = getRecipeByMenuAndChef(menuName, chefName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -144,7 +144,7 @@ def answerRecipeByChefIfServerMenuNone():
     try:
         recipe = getRandomRecipeByChef(chefName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -170,7 +170,7 @@ def answerRecipeByMenuAndChef():
     try:
         recipe = getRecipeByMenuAndChef(menuName, chefName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -205,7 +205,7 @@ def answerRecipeIfServerMenuExists():
     try:
         menuName = session[sessionId]['menuName']
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     recipe = getRandomRecipeByMenu(menuName)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
@@ -229,7 +229,7 @@ def answerRecipeIfServerMenuNone():
     try:
         recipe = recommendRecipe()
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -279,7 +279,7 @@ def answerIngredientsIfServerMenuExists():
     try:
         recipe = getRandomRecipeByMenu(menuName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -300,7 +300,7 @@ def answerIngredientsIfServerRecipeExists():
     try:
         recipe = getRecipeByRecipe(recipeName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -328,7 +328,7 @@ def answerIngredientsByMenu():
     try:
         recipe = getRandomRecipeByMenu(menuName)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['recipeName'] = recipe['name']
     session[sessionId]['chefName'] = recipe['chef']
     session[sessionId]['menuName'] = recipe['menu']
@@ -363,7 +363,7 @@ def movePreviousStepIfServerStepExists():
     try:
         step, newStepNo = previousStep(recipeName, oldStepNo)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
@@ -398,7 +398,7 @@ def moveNextStepIfServerStepExists():
     try:
         step, newStepNo = nextStep(recipeName, oldStepNo)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
@@ -433,7 +433,7 @@ def moveStepByStepNoIfServerRecipeExists():
     try:
         step, newStepNo = numberStep(recipeName, reqStepNo)
     except:
-        return Response("NONE", status=204)
+        return Response("error_db_none", status=200)
     session[sessionId]['step'] = step
     session[sessionId]['stepNo'] = newStepNo
     res = {
