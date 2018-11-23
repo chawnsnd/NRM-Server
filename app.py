@@ -48,12 +48,7 @@ def before_request():
 
 #0. 심사를 위한 health
 @app.route("/health", methods=["GET"])
-def healthget():
-    return Response("OK", status=200)
-
-#0. 심사를 위한 health
-@app.route("/health", methods=["POST"])
-def healthpost():
+def health():
     return Response("OK", status=200)
 
 #0. 심사를 위한 allRecipe
