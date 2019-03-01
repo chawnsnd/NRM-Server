@@ -76,4 +76,4 @@ def answerFromIngredientsFromRecipe():
     return jsonify(result);
 
 if __name__ == '__main__':
-    app.run(host='ec2-13-125-180-243.ap-northeast-2.compute.amazonaws.com',port=5000)
+    app.run(host='your.domain.com',port=5000)# your.domain.com 을 사용중인 도메인 명으로 바꿔주세요
